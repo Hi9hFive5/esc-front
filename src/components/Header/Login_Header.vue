@@ -21,10 +21,15 @@
 </script>
 
 <style scoped>
+    @font-face {
+        font-family: '감탄로드돋움체 Bold';
+        src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
+    }
+
      * {
 		margin: 0;
 		padding: 0;
-        font-family: 'GmarketSansMedium';
+        font-family: 'EliceDigitalBaeum-Bd';
 	}
 
     .header {
@@ -96,6 +101,7 @@
         
     }
     .menu span{
+        font-family: '감탄로드돋움체 Bold', sans-serif;
         margin-left: 3%;
         cursor: pointer;
     }
