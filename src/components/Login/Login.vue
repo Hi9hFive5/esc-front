@@ -77,12 +77,7 @@ function inputCheck() {
 </script>
 
 <style scoped>
-    .wrapper {
-        width:75%;
-        margin-left: 12.5%;
-        margin-right: 12.5%;
-        display: grid;
-    }
+    
 
     .login {
         width:40%;
