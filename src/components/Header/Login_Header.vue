@@ -17,6 +17,7 @@
 </template>
 
 <script setup>
+    
 
 </script>
 
@@ -59,8 +60,6 @@
         font-style: bold;
         margin-top:53px;
         margin-right: 2%;
-        
-        
     }
 
     .myPageBtn {
