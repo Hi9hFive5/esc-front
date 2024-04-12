@@ -1,5 +1,5 @@
 <script setup>
-  import { reactive, onMounted } from 'vue';
+  import { reactive, ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
@@ -20,6 +20,9 @@
 
         const data = await response.json();
         state.studyclub = data;
+
+        state.studyclub["endDate"] = splitDate(state.studyclub["endDate"]);
+        state.studyclub["diff"] = calcDate(state.studyclub["endDate"]);
 
     } catch(error) {
         console.error('fetch error: ' + error.message);
@@ -42,6 +45,19 @@
     }
   }
 
+  const splitDate = (date) => {
+
+    return date.slice(0, 10);
+  }
+
+  const calcDate = (date) => {
+
+    const currentDate = new Date(new Date().toISOString().slice(0, 10));
+    date = new Date(splitDate(state.studyclub["endDate"]));
+
+    return Math.trunc((date - currentDate) / (1000 * 60 * 60 * 24));
+  };
+
   onMounted(async() => {
     await fetchStudyclub(id);
     await fetchCategory(state.studyclub["studyId"]);
@@ -52,7 +68,7 @@
     <div>스터디그룹 페이지</div>
     <div class="hello">👋 <{{ state.studyclub["name"] }}>에 오신 것을 환영합니다!</div>
     <div class="info">
-        <div class="d-day"> {{ state.category["studyName"] }} 시험일: {{ state.studyclub["endDate"] }}  (D - n)</div>
+        <div class="d-day"> {{ state.category["studyName"] }} 시험일: {{ state.studyclub["endDate"] }}  (D - {{ state.studyclub["diff"] }})</div>
         <div class="goal">목표 점수: 추가추가추가추가</div>
         <div class="introduce">{{ state.studyclub["introduce"] }}</div>
     </div>
