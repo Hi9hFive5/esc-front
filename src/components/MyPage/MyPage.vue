@@ -1,0 +1,136 @@
+<template>
+<div class="container">
+    <div class="userImage">
+        <p>이미지</p>
+    </div>
+    <div class="userInfo">
+        <p>이름: {{ userdata.name }} </p>
+        <p>이메일: {{ userdata.email }} </p>
+        <p>별명: {{ userdata.nickname }} </p>
+        <p>등급: {{ userdata.grade }} </p>
+    </div>
+</div>
+
+<div class="container">
+    
+    <div class="bigPage">
+        <p>참여중인 스터디</p>
+        <div class="smallPage">
+            <RouterLink v-for="userinfo in userinfos" :to="{ path: `/studyclub/${userinfo.studyclubId}` }" :key="userinfo.id">
+                <p>{{ userinfo.studyclubId }}. {{ userinfo.name }} </p>
+            </RouterLink>
+        </div>
+    </div>
+    <div class="bigPage">
+        <p>참여 신청한 스터디</p>
+        <div class="smallPage">
+        </div>
+    </div>
+    <div class="bigPage">
+        <p>작성한 로그</p>
+        <div class="smallPage">
+
+        </div>
+    </div>
+    <div class="bigPage">
+        <p>작성한 모집글</p>
+        <div class="smallPage">
+        </div>
+    </div>
+</div>
+</template>
+
+<script setup>
+  import axios from 'axios';
+  import { useRouter,RouterLink } from 'vue-router';
+  import { ref, onMounted } from 'vue';
+
+  const userinfos = ref([]);
+  const userdata = ref([]);
+
+  const router = useRouter();
+  const memberId = router.currentRoute.value.params.id;
+
+
+onMounted(async () => {
+
+  try {
+    const response = await axios.get(`http://localhost:8080/user/joinStudyClub/${memberId}`)
+    // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
+    userinfos.value = response.data    
+
+    
+  } catch (error) {
+    console.error('데이터를 받아오는 중 에러 발생:', error);
+  }
+});
+
+onMounted(async () => {
+
+try {
+  const res = await axios.get(`http://localhost:8080/user/${memberId}`)
+  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
+  userdata.value = res.data    
+
+  
+} catch (error) {
+  console.error('데이터를 받아오는 중 에러 발생:', error);
+}
+});
+
+
+
+</script>
+
+<style scoped>
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.smallPage {
+    background-color: white;
+    width: 180px;
+    height: 210px;
+    padding: 20px;
+
+}
+.bigPage {
+
+    margin-right: 20px;
+    margin-left: 20px;
+    border: 1px solid black;
+    background-color: black;
+    color: white;
+    font-family: '감탄로드돋움체 Bold';
+    src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
+       
+}
+
+
+.userImage {
+    background-color: #ddd;
+    width: 120px;
+    height: 150px;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-right: 60px;
+    margin-left: 60px;
+    justify-content: center;
+}
+.userInfo {
+    background-color: white;
+    width: 400px;
+    height: 150px;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-right: 60px;
+    margin-left: 60px;
+    justify-content: center;
+    font-family: '감탄로드돋움체 Bold';
+    src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
+    border: 1px solid black;
+}
+
+</style>
