@@ -10,7 +10,8 @@ const props = defineProps({
 
 const state = reactive({
   studyclub: {},
-  category: ""
+  category: "",
+  goal: {}
 });
 
 const recruitDetail = (id) => {
@@ -52,7 +53,23 @@ const fetchCategory = async(id) => {
   }
 }
 
-const splitDate = async(date) => {
+const fetchGoal = async(id) => {
+    try {
+        const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+
+        if(!response.ok) {
+            throw new Error('response is not ok');
+        }
+
+        const data = await response.json();
+        state.goal = data;
+
+    } catch(error) {
+        console.error('fetch error: ' + error.message);
+    }
+  }
+
+const splitDate = (date) => {
    return date.slice(0, 10);
 }
 
@@ -65,7 +82,7 @@ const setHover = (value) => {
 onMounted(async() => {
   await fetchStudyclub(props.recruit.clubId);
   await fetchCategory(state.studyclub.studyId);
-  await splitDate();
+  await fetchGoal(state.studyclub.id);
 });
 </script>
 
@@ -80,7 +97,7 @@ onMounted(async() => {
       </template>
       <div class="category">
         <span class="highlight">#</span> {{ state.category["studyName"] }} &nbsp;
-        <span class="highlight">#</span>900
+        <span class="highlight">#</span> {{ state.goal["score"] }}
       </div>
     </div>
     <div class="content">

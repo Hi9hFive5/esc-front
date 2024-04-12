@@ -6,7 +6,8 @@
     const id = route.params.id;
 
     const state = reactive({
-        category: []
+        category: [],
+        goals: []
     })
 
     const studyclub = reactive({
@@ -14,7 +15,9 @@
         introduce: "",
         memberLimit: "",
         endDate: "",
-        studyId: 0
+
+        selectedCategory: "",
+        selectedGoal: ""
     })
 
     const fetchCategory = async() => {
@@ -48,13 +51,47 @@
             studyclub.name = data.name;
             studyclub.introduce = data.introduce;
             studyclub.memberLimit = data.memberLimit;
-            studyclub.studyId = data.studyId;
             studyclub.endDate = splitDate(data.endDate);
+            studyclub.selectedCategory = data.studyId;
+
 
         } catch(error) {
             console.error('fetch error: ' + error.message);
         }
     };
+    
+    const fetchStudygoal = async(id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            studyclub.selectedGoal = data.goalId;
+
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+  }
+
+    const fetchGoals = async() => {
+
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/goal/${studyclub.selectedCategory}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            state.goals = data;
+            
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    }
     
     const modifyStudyclub = async() => {
         
@@ -63,11 +100,14 @@
             introduce: studyclub.introduce, 
             memberLimit: studyclub.memberLimit,
             endDate: studyclub.endDate,
-            studyId: studyclub.studyId,
+            studyId: studyclub.selectedCategory,
+            goalId: studyclub.selectedGoal
         }
 
+        console.log(modifyData);
+
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/modify/5`, {
+            const response = await fetch(`http://localhost:8080/studyclub/modify/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -91,6 +131,7 @@
     onMounted(async() => {
         await fetchCategory();
         await fetchStudyclub(id);
+        await fetchStudygoal(id);
     });
 </script>
 
@@ -107,7 +148,7 @@
                 <input type="number" class="content" v-model="studyclub.memberLimit"/>
             </div>
             <div class="category">스터디클럽 카테고리: 
-                <select class="content" v-model="studyclub.studyId">
+                <select class="content" v-model="studyclub.selectedCategory" @change="fetchGoals()">
                     <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
                 </select>
             </div>
@@ -115,7 +156,9 @@
                 <input type="date" class="content" v-model="studyclub.endDate">
             </div>
             <div class="goal">스터디클럽 목표 점수: 
-                <input type="text" class="content">
+                <select class="content" v-model="studyclub.selectedGoal">
+                    <option v-for="item in state.goals" :value="item.id"> {{ item.score }} </option>
+                </select>
             </div>
             <div class="submit" @click="modifyStudyclub">
                 <button>수정하기</button>

@@ -7,7 +7,8 @@
 
   const state = reactive({
     studyclub: {},
-    category: {}
+    category: {},
+    goal: {}
   });
 
   const fetchStudyclub = async(id) => {
@@ -45,6 +46,22 @@
     }
   }
 
+  const fetchGoal = async(id) => {
+    try {
+        const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+
+        if(!response.ok) {
+            throw new Error('response is not ok');
+        }
+
+        const data = await response.json();
+        state.goal = data;
+
+    } catch(error) {
+        console.error('fetch error: ' + error.message);
+    }
+  }
+
   const splitDate = (date) => {
 
     return date.slice(0, 10);
@@ -61,6 +78,7 @@
   onMounted(async() => {
     await fetchStudyclub(id);
     await fetchCategory(state.studyclub["studyId"]);
+    await fetchGoal(id);
   })
 </script>
 
@@ -69,7 +87,7 @@
     <div class="hello">👋 <{{ state.studyclub["name"] }}>에 오신 것을 환영합니다!</div>
     <div class="info">
         <div class="d-day"> {{ state.category["studyName"] }} 시험일: {{ state.studyclub["endDate"] }}  (D - {{ state.studyclub["diff"] }})</div>
-        <div class="goal">목표 점수: 추가추가추가추가</div>
+        <div class="goal">목표 점수: {{ state.goal["score"] }}</div>
         <div class="introduce">{{ state.studyclub["introduce"] }}</div>
     </div>
 </template>

@@ -59,6 +59,29 @@
         }
     }
 
+    const applyRecruit = async(userId, id) => {
+        const postData = {
+            userId: userId,      // 추후 수정
+            postId: id
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:8080/recruit-apply/regist/${id}/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                    body: JSON.stringify(postData)               
+            });
+
+            if(!response) {
+                throw new Error('Network response was not ok');
+            }
+        } catch(error) {
+            console.error('There was a problem with the fetch operation:', error.message);
+        }
+    }
+
     onMounted(async() => {
         await fetchRecruit(id);
         await fetchStudyclub(state.recruit["clubId"]);
@@ -97,7 +120,9 @@
             <div class="section-content">~ {{ state.studyclub["endDate"] }}까지</div> 
         </div>
         <hr>
-        <button>신청하기</button>
+        <div class="submit" @click="applyRecruit(2, id)">
+            <button>신청하기</button>
+        </div>
     </div>
 </template>
 
@@ -136,4 +161,9 @@
     .section-content {
         margin-left: 40px;
     }
+    .submit {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+  }
 </style>
