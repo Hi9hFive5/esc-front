@@ -8,7 +8,8 @@
     const state = reactive({
       recruit: {},
       studyclub: {},
-      category: {}
+      category: {},
+      exam: {}
     });
 
     const fetchRecruit = async(id) => {
@@ -59,6 +60,23 @@
         }
     }
 
+    const fetchExam = async(id) => {
+        try {
+                const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
+
+                if(!response.ok) {
+                    throw new Error('response is not ok');
+                }
+
+                const data = await response.json();
+                state.exam = data;
+                state.exam["examDate"] = state.exam["examDate"].substring(0, 10);
+
+            } catch(error) {
+                console.error('fetch error: ' + error.message);
+            }
+    }
+
     const applyRecruit = async(userId, id) => {
         const postData = {
             userId: userId,      // 추후 수정
@@ -85,7 +103,8 @@
     onMounted(async() => {
         await fetchRecruit(id);
         await fetchStudyclub(state.recruit["clubId"]);
-        await fetchCategory(state.studyclub["studyId"]);
+        await fetchCategory(state.studyclub["id"]);
+        await fetchExam(state.studyclub["id"]);
     });
 </script>
 
@@ -93,10 +112,11 @@
     <div class="post-header">
         <div class="title-area">
             <div class="title">{{ state.recruit["title"] }}</div>
-            <div class="createdDate">{{ state.recruit["createdDate"] }}</div>
+            <div class="createdDate">작성일:&nbsp; {{ state.recruit["createdDate"] }}</div>
         </div>
         <div class="writer-area">
             <div class="writer">{{ state.recruit["writerId"] }}</div>
+            <div class="chat">채팅하기</div>
         </div>
     </div>
     <hr>
@@ -117,7 +137,7 @@
         </div>
         <div class="section">
             <div class="section-title">📅 진행 기간</div>
-            <div class="section-content">~ {{ state.studyclub["endDate"] }}까지</div> 
+            <div class="section-content">~ {{ state.exam["examDate"] }}까지</div> 
         </div>
         <hr>
         <div class="submit" @click="applyRecruit(2, id)">
@@ -142,9 +162,13 @@
         color: gray;
         margin: 10px;
     }
-    .writer {
+    .chat {
         margin: 10px;
-        margin-top: 55px;
+    }
+    .writer {
+        align-items: center;
+        height: 35px;
+        margin: 10px;
     }
     .section {
         margin: 30px 20px;

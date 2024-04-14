@@ -7,6 +7,7 @@
 
     const state = reactive({
         category: [],
+        exams: [],
         goals: []
     })
 
@@ -14,9 +15,8 @@
         name: "",
         introduce: "",
         memberLimit: "",
-        endDate: "",
-
         selectedCategory: "",
+        selectedExam: "",
         selectedGoal: ""
     })
 
@@ -37,44 +37,22 @@
         }
     };
 
-    const fetchStudyclub = async(id) => {
-        
+    const fetchExams = async() => {
+
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/detail/${id}`);
+            const response = await fetch(`http://localhost:8080/studyclub/exam/${studyclub.selectedCategory}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
             }
 
             const data = await response.json();
+            state.exams = data;
             
-            studyclub.name = data.name;
-            studyclub.introduce = data.introduce;
-            studyclub.memberLimit = data.memberLimit;
-            studyclub.endDate = splitDate(data.endDate);
-            studyclub.selectedCategory = data.studyId;
-
-
         } catch(error) {
             console.error('fetch error: ' + error.message);
         }
-    };
-    
-    const fetchStudygoal = async(id) => {
-        try {
-            const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
-
-            if(!response.ok) {
-                throw new Error('response is not ok');
-            }
-
-            const data = await response.json();
-            studyclub.selectedGoal = data.goalId;
-
-        } catch(error) {
-            console.error('fetch error: ' + error.message);
-        }
-  }
+    }
 
     const fetchGoals = async() => {
 
@@ -92,6 +70,60 @@
             console.error('fetch error: ' + error.message);
         }
     }
+
+    const fetchStudyclub = async(id) => {
+        
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/detail/${id}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            
+            studyclub.name = data.name;
+            studyclub.introduce = data.introduce;
+            studyclub.memberLimit = data.memberLimit;
+            studyclub.selectedCategory = data.studyId;
+
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    };
+
+    const fetchStudyGoal = async(id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            studyclub.selectedGoal = data.id;
+
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    }
+
+    const fetchStudyExam = async(id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            studyclub.selectedExam = data.id;
+            console.log(studyclub.selectedExam);
+
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    }
     
     const modifyStudyclub = async() => {
         
@@ -99,8 +131,8 @@
             name: studyclub.name,
             introduce: studyclub.introduce, 
             memberLimit: studyclub.memberLimit,
-            endDate: studyclub.endDate,
             studyId: studyclub.selectedCategory,
+            examId: studyclub.selectedExam,
             goalId: studyclub.selectedGoal
         }
 
@@ -131,7 +163,8 @@
     onMounted(async() => {
         await fetchCategory();
         await fetchStudyclub(id);
-        await fetchStudygoal(id);
+        await fetchStudyGoal(id);
+        await fetchStudyExam(id);
     });
 </script>
 
@@ -143,17 +176,19 @@
                 <input class="content" v-model="studyclub.name"/>
             </div>
             <div class="introduce">스터디클럽 소개: </div>
-            <textarea class="content" cols="50" rows="5" v-model="studyclub.introduce"/>
+                <textarea class="content" cols="50" rows="5" v-model="studyclub.introduce"/>
             <div class="number">스터디클럽 정원: 
                 <input type="number" class="content" v-model="studyclub.memberLimit"/>
             </div>
             <div class="category">스터디클럽 카테고리: 
-                <select class="content" v-model="studyclub.selectedCategory" @change="fetchGoals()">
+                <select class="content" v-model="studyclub.selectedCategory" @change="fetchGoals(), fetchExams()">
                     <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
                 </select>
             </div>
             <div class="date">스터디클럽 시험일: 
-                <input type="date" class="content" v-model="studyclub.endDate">
+                <select class="content" v-model="studyclub.selectedExam">
+                    <option v-for="item in state.exams" :value="item.id"> {{ item.examDate.substring(0, 10) }} </option>
+                </select>
             </div>
             <div class="goal">스터디클럽 목표 점수: 
                 <select class="content" v-model="studyclub.selectedGoal">

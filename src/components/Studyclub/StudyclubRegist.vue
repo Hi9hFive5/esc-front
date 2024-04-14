@@ -7,14 +7,15 @@
 
     const state = reactive({
         category: [],
+        exams: [],
         goals: []
     })
 
     const name = ref();
     const introduce = ref();
     const memberLimit = ref();
-    const endDate = ref();
     const selectedCategory = ref();
+    const selectedExam = ref();
     const selectedGoal = ref();
 
     const fetchCategory = async() => {
@@ -34,6 +35,24 @@
             console.error('fetch error: ' + error.message);
         }
     };
+
+    const fetchExams = async() => {
+
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/exam/${selectedCategory.value}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            state.exams = data;
+            
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    }
+
 
     const fetchGoals = async() => {
 
@@ -58,12 +77,10 @@
             name: name.value,
             introduce: introduce.value, 
             memberLimit: memberLimit.value,
-            endDate: endDate.value,
             studyId: selectedCategory.value,
+            examId: selectedExam.value,
             goalId: selectedGoal.value
         }
-
-        console.log(postData);
 
         try {
             const response = await fetch(`http://localhost:8080/studyclub/regist/${id}`, {
@@ -102,12 +119,14 @@
                 <input type="number" class="content" v-model="memberLimit"/>
             </div>
             <div class="category">스터디클럽 카테고리: 
-                <select class="content" v-model="selectedCategory" @change="fetchGoals()">
+                <select class="content" v-model="selectedCategory" @change="fetchGoals(), fetchExams()">
                     <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
                 </select>
             </div>
             <div class="date">스터디클럽 시험일: 
-                <input type="date" class="content" v-model="endDate">
+                <select class="content" v-model="selectedExam">
+                    <option v-for="item in state.exams" :value="item.id"> {{ item.examDate.substring(0, 10) }} </option>
+                </select>
             </div>
             <div class="goal">스터디클럽 목표 점수: 
                 <select class="content" v-model="selectedGoal">

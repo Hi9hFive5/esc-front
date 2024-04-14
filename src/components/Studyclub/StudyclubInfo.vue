@@ -8,7 +8,8 @@
   const state = reactive({
     studyclub: {},
     category: {},
-    goal: {}
+    goal: {},
+    exam: {}
   });
 
   const fetchStudyclub = async(id) => {
@@ -21,9 +22,6 @@
 
         const data = await response.json();
         state.studyclub = data;
-
-        state.studyclub["endDate"] = splitDate(state.studyclub["endDate"]);
-        state.studyclub["diff"] = calcDate(state.studyclub["endDate"]);
 
     } catch(error) {
         console.error('fetch error: ' + error.message);
@@ -62,6 +60,25 @@
     }
   }
 
+  const fetchExam = async(id) => {
+    try {
+          const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
+
+          if(!response.ok) {
+              throw new Error('response is not ok');
+          }
+
+          const data = await response.json();
+          state.exam = data;
+
+          state.exam["examDate"] = splitDate(state.exam["examDate"]);
+          state.studyclub["diff"] = calcDate(state.exam["examDate"]);
+
+      } catch(error) {
+          console.error('fetch error: ' + error.message);
+      }
+  }
+
   const splitDate = (date) => {
 
     return date.slice(0, 10);
@@ -70,15 +87,16 @@
   const calcDate = (date) => {
 
     const currentDate = new Date(new Date().toISOString().slice(0, 10));
-    date = new Date(splitDate(state.studyclub["endDate"]));
+    console.log(date);
 
-    return Math.trunc((date - currentDate) / (1000 * 60 * 60 * 24));
+    return Math.trunc((new Date(date) - currentDate) / (1000 * 60 * 60 * 24));
   };
 
   onMounted(async() => {
     await fetchStudyclub(id);
-    await fetchCategory(state.studyclub["studyId"]);
+    await fetchCategory(state.studyclub["id"]);
     await fetchGoal(id);
+    await fetchExam(id);
   })
 </script>
 
@@ -86,7 +104,7 @@
     <div>스터디그룹 페이지</div>
     <div class="hello">👋 <{{ state.studyclub["name"] }}>에 오신 것을 환영합니다!</div>
     <div class="info">
-        <div class="d-day"> {{ state.category["studyName"] }} 시험일: {{ state.studyclub["endDate"] }}  (D - {{ state.studyclub["diff"] }})</div>
+        <div class="d-day"> {{ state.category["studyName"] }} 시험일: {{ state.exam["examDate"]}}  (D - {{ state.studyclub["diff"] }})</div>
         <div class="goal">목표 점수: {{ state.goal["score"] }}</div>
         <div class="introduce">{{ state.studyclub["introduce"] }}</div>
     </div>
