@@ -43,6 +43,14 @@ const router = createRouter({
         {
             path: '/recruit-modify/:id',
             component: () => import('@/components/Recruit/RecruitModify.vue')
+        },
+        {
+            path: '/chat/room/:id',
+            component: () => import('@/views/ChatRoom.vue')
+        },
+        {
+            path: '/chat/list',
+            component: () => import('@/views/ChatRoomList.vue')
         }
     ]
 })
