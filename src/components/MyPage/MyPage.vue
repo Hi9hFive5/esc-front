@@ -1,7 +1,15 @@
 <template>
 <div class="container">
     <div class="userImage">
-        <p>이미지</p>
+      <form  enctype="multipart/form-data">
+        <div>
+        <img :src="imageUrl" alt="Uploaded Image">
+      </div>
+      </form>
+        <div>
+          <input type="file" @change="handleFileChange">
+          <button @click ="uploadImage">Upload</button>
+         </div>
     </div>
     <div class="userInfo">
         <p>이름: {{ userdata.name }} </p>
@@ -24,17 +32,25 @@
     <div class="bigPage">
         <p>참여 신청한 스터디</p>
         <div class="smallPage">
+          <div v-for="userrecruit in userrecruits" :key="userrecruit.id">
+                <p> {{ userrecruit.recruitPostId }}. {{ userrecruit.recruitStatus }} </p>
+          </div>
         </div>
     </div>
     <div class="bigPage">
         <p>작성한 로그</p>
         <div class="smallPage">
-
+          <RouterLink v-for="userlog in userlogs" :to="{ path: `/studylog/${userlog.id}` }" :key="userlog.id">
+                <p> {{ userlog.content }} </p>
+          </RouterLink>
         </div>
     </div>
     <div class="bigPage">
         <p>작성한 모집글</p>
         <div class="smallPage">
+          <RouterLink v-for="writeReruit in writeReruits" :to="{ path: `/recruit/${writeReruit.id}` }" :key="writeReruit.id">
+                <p> {{ writeReruit.title }} </p>
+          </RouterLink>
         </div>
     </div>
 </div>
@@ -47,6 +63,9 @@
 
   const userinfos = ref([]);
   const userdata = ref([]);
+  const userlogs = ref();
+  const userrecruits = ref([]);
+  const writeReruits = ref([]);
 
   const router = useRouter();
   const memberId = router.currentRoute.value.params.id;
@@ -78,8 +97,84 @@ try {
 }
 });
 
+onMounted(async () => {
+
+try {
+  const response = await axios.get(`http://localhost:8080/recruit-apply/user/${memberId}`)
+  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
+  userrecruits.value = response.data    
+  console.log(userrecruits.value)
+  
+} catch (error) {
+  console.error('데이터를 받아오는 중 에러 발생:', error);
+}
+});
 
 
+
+onMounted(async () => {
+
+try {
+  const response = await axios.get(`http://localhost:8080/recruit/list/${memberId}`)
+  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
+  writeReruits.value = response.data    
+  
+} catch (error) {
+  console.error('데이터를 받아오는 중 에러 발생:', error);
+}
+});
+
+onMounted(async () => {
+
+try {
+  const response = await axios.get(`http://localhost:8080/studyLog/findWritingStudyclubLogById/${memberId}`)
+  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
+  userlogs.value = response.data    
+  console.log(userlogs.value)
+  
+} catch (error) {
+  console.error('데이터를 받아오는 중 에러 발생:', error);
+}
+});
+
+let file = null;
+const userId = router.currentRoute.value.params.id;
+
+const handleFileChange = (event) => {
+  file = event.target.files[0];
+};
+
+const uploadImage = () => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('userId', userId);
+
+  axios.post('http://localhost:8080/file/upload', formData)
+    .then(response => {
+      console.log('Image uploaded successfully:', response.data);
+    })
+    .catch(error => {
+      console.error('Error uploading image:', error);
+    });
+};
+
+const imageUrl = ref('');
+
+const getImageUrl = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/file/${memberId}`);
+    imageUrl.value = URL.createObjectURL(response.data);
+    console.log(imageUrl)
+
+    console.log(response)
+  } catch (error) {
+    console.error('Error getting image:', error);
+  }
+};
+onMounted(() => {
+  const memberId = router.currentRoute.value.params.id;
+  getImageUrl(memberId);
+});
 </script>
 
 <style scoped>
@@ -94,6 +189,8 @@ try {
     width: 180px;
     height: 210px;
     padding: 20px;
+    color: black;
+    overflow-y: auto;
 
 }
 .bigPage {
