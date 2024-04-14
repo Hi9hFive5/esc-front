@@ -43,6 +43,10 @@ const router = createRouter({
         {
             path: '/recruit-modify/:id',
             component: () => import('@/components/Recruit/RecruitModify.vue')
+        },
+        {
+            path: '/member-schedule/:studyclubId/:memberId',
+            component: () => import('@/components/Schedule/MemberSchedule.vue')
         }
     ]
 })
