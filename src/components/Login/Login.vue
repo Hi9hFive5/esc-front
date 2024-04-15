@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div>
         <div class="login">
             <div class="title">
                 <h1>English Study Club</h1>
@@ -12,30 +12,36 @@
                 <h2>비밀번호</h2>
                 <input type="password" class="pwdBox" placeholder="비밀번호를 입력하세요" v-model.trim="password">
             </div>
-            <div>
-                <span class="left">회원가입</span>
-                <span class="right">비밀번호 찾기</span>
+            <div class="bottomtext">
+                <span class="left" @click="signup()">회원가입</span>
+                <span class="right" @click="resetPwd()">비밀번호 찾기</span>
                 <span class="division">|</span>
-                <span class="right">아이디 찾기</span>           
+                <span class="right" @click="findId()">아이디 찾기</span>           
             </div>
             <div class="logindiv">
-                <button type="button" class="loginBtn" @click.prevent="[inputCheck(), tokenData()]">로그인</button>
+                <button type="button" class="loginBtn" @click="inputCheck()">로그인</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { provide, ref } from 'vue';
 import axios from "axios";
 import { RouterLink } from 'vue-router';
 import router from '@/router/router';
 
+
 const email = ref('');
 const password = ref('');
 
-console.log(email);
-console.log(password);
+function signup() {
+    router.push('/regist');
+}
+
+function findId() {
+    router.push('/findId');
+}
 
 const tokenData = async () => {
     await axios.post("/api/login",
@@ -48,10 +54,11 @@ const tokenData = async () => {
             console.log('response headers: ', response.headers);
 
             // 토큰 및 아이디 로컬 스토리지에 저장
-            localStorage.setItem('token', response.headers.token)
-            localStorage.setItem('email', email.value)
-
-            router.push('/');
+            localStorage.setItem('token', response.headers.token);
+            // localStorage.setItem('email', email.value)
+            
+        
+            router.push('/after/login'); 
         }
     }).catch ((e) => {
         console.log('로그인 실패');
@@ -71,91 +78,95 @@ function inputCheck() {
         console.log('입력 정보 확인 완료');
         console.log(email.value);
         console.log(password.value);
-        return true;
+        return tokenData();
     }
+}
+
+function resetPwd() {
+    router.push('/resetPassword');
 }
 </script>
 
 <style scoped>
+.login {
+    width:40%;
+    margin-left: 30%;
+    margin-right: 30%;
+    display: grid;
+}
+
+.title {
+    text-align: center;
+    margin-top: 5%;
+    font-size: 20px;
     
+}
 
-    .login {
-        width:40%;
-        margin-left: 30%;
-        margin-right: 30%;
-        display: grid;
-    }
+.idTitle{
+    width: 100%;
+    margin-top: 10%;
+    font-size: 12px;
 
-    .title {
-        text-align: center;
-        margin-top: 5%;
-        font-size: 20px;
-        
-    }
+}
 
-    .idTitle{
-        width: 100%;
-        margin-top: 10%;
-        font-size: 12px;
+.idBox {
+    width: 100%;
+    height: 40px;
+}
 
-    }
+.pwdTitle {
+    width: 100%;
+    font-size: 12px;
+}
 
-    .idBox {
-        width: 100%;
-        height: 40px;
-    }
+.pwdBox {
+    width: 100%;
+    height: 40px;
+}
 
-    .pwdTitle {
-        width: 100%;
-        font-size: 12px;
-    }
+.right {
+    float: right;
+    margin-left: 2%;
+    cursor: pointer;
+}
 
-    .pwdBox {
-        width: 100%;
-        height: 40px;
-    }
+.division {
+    float: right;
+    margin-left: 2%;
+}
 
-    .right {
-        float: right;
-        margin-left: 2%;
-        cursor: pointer;
-    }
+.left {
+    cursor: pointer;
+}
 
-    .division {
-        float: right;
-        margin-left: 2%;
-    }
+.logindiv {
+    width:100%;
+    margin-top:20%;
+    margin-bottom: 20%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
 
-    .left {
-        cursor: pointer;
-    }
+}
 
-    .logindiv {
-        width:100%;
-        margin-top:20%;
-        margin-bottom: 20%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        justify-items: center;
+.loginBtn {
+    background-color: #515050;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-style: bold;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
 
-    }
-
-    .loginBtn {
-        background-color: #515050;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        font-style: bold;
-        justify-content: center;
-        display: flex;
-        align-items: center;
-        width: 100%;
-        grid-column-start: 2;
-	    grid-column-end: 3;
-    }
-
-    
+.bottomtext {
+    margin-top:1%;
+}
 </style>

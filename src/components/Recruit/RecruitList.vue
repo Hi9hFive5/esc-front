@@ -1,6 +1,13 @@
 <script setup>
     import { reactive, ref, onMounted } from 'vue';
     import RecruitCard from './RecruitCard.vue';
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
+
+    const navigateTo = (path) => {
+        router.push(path);
+    }
 
     const state = reactive({
         recruitList: [],
@@ -63,6 +70,7 @@
         <select class="category" v-model="selectedCategory">
             <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
         </select>
+        <div class="fixed" @click="navigateTo('/recruit-regist/1')">모집글?스터디클럽 등록하기?</div>
     </div>
     <div>
         <RecruitCard class="card" v-for="recruit in state.recruitList" :key="recruit.id" :recruit="recruit"></RecruitCard>
@@ -90,5 +98,15 @@
         width: 100px;
         height: 20px;
         font-size: 15px;
+    }
+    .fixed {
+        border: 1px solid black;
+        border-radius: 20px;
+        background-color: aliceblue;
+        padding: 20px;
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+        z-index: 999;
     }
 </style>

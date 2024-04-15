@@ -5,7 +5,7 @@
         </div>
         <div class="menu">
             <span>소개</span>
-            <span>모집</span>
+            <span @click="navigateTo('/recruit-regist/1')">모집</span>
             <span>스터디클럽</span>
             <span>마이페이지</span>
         </div>
@@ -17,7 +17,13 @@
 </template>
 
 <script setup>
-    
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
+
+    const navigateTo = (path) => {
+        router.push(path);
+    }
 
 </script>
 
