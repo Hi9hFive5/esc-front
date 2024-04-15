@@ -25,9 +25,9 @@
         <div class="section">
             <div class="section-title">
               일정
-              <!-- <RouterLink v-for="studyschedule in studyschedules" :to="{ path: `/member-schedule/${studyschedule.studyclubId}` }" :key="studyschedule.id">
-                    <p>{{ studyschedule.title }} </p>
-                </RouterLink> -->
+                <RouterLink v-for="studyschedule in studyschedules" :to="{ path: `/member-schedule/${studyschedule.studyclubId}` }" :key="studyschedule.id">
+                    <p>{{ studyschedule.memberSchedules.startDatetime }} ~ {{ studyschedule.memberSchedules.endDatetime }} </p>
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -78,9 +78,10 @@ const studyschedules = ref([]);
 onMounted(async () => {
 
 try {
-  const response = await axios.get(`http://localhost:8080/member-schedule/studyclub//${studyclubId}`)
+  const response = await axios.get(`http://localhost:8080/member-schedule/overlap/${studyclubId}`)
   // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
   studylogs.value = response.data 
+  console.log(studylogs.value)
 
   
 } catch (error) {
