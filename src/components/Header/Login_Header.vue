@@ -5,7 +5,7 @@
         </div>
         <div class="menu">
             <span>소개</span>
-            <span>모집</span>
+            <span @click="navigateTo('/recruit-regist/1')">모집</span>
             <span>스터디클럽</span>
             <span>마이페이지</span>
         </div>
@@ -17,14 +17,26 @@
 </template>
 
 <script setup>
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
+
+    const navigateTo = (path) => {
+        router.push(path);
+    }
 
 </script>
 
 <style scoped>
+    @font-face {
+        font-family: '감탄로드돋움체 Bold';
+        src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
+    }
+
      * {
 		margin: 0;
 		padding: 0;
-        font-family: 'GmarketSansMedium';
+        font-family: 'EliceDigitalBaeum-Bd';
 	}
 
     .header {
@@ -54,8 +66,6 @@
         font-style: bold;
         margin-top:53px;
         margin-right: 2%;
-        
-        
     }
 
     .myPageBtn {
@@ -96,6 +106,7 @@
         
     }
     .menu span{
+        font-family: '감탄로드돋움체 Bold', sans-serif;
         margin-left: 3%;
         cursor: pointer;
     }

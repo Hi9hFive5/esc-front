@@ -1,7 +1,7 @@
 <template>
     <header class="header">
         <div class="logo">
-            <img src="../../assets/finalLogo.png" class="logoimage">
+            <img src="../../assets/finalLogo.png" @click="main()" class="logoimage">
         </div>
         <div class="menu">
             <span>소개</span>
@@ -10,15 +10,30 @@
             <span>마이페이지</span>
         </div>
         <div class="loginbtndiv">
-            <button type="button" class="signUpBtn" onclick="">sign up</button>
-            <button type="button" class="signInBtn" onclick="">sign in</button>
+            <button type="button" class="signUpBtn" @click="signup()">sign up</button>
+            <button type="button" class="signInBtn"  @click="login()">sign in</button>
         </div> 
 
     </header>
 </template>
 
 <script setup>
+    import router from '@/router/router';
+    import axios from "axios";
+    import { ref, onBeforeMount } from "vue";
+    import {useRoute} from "vue-router";
 
+    function login() {
+        router.push('/login');
+    }
+
+    function signup() {
+        router.push('/regist');
+    }
+
+    function main() {
+        router.push('/');
+    }
 </script>
 
 <style scoped>
