@@ -2,21 +2,21 @@
     <div>
         <div class="regist">
             <div class="title">
-                <h1>English Study Club</h1>
+                <h3>English Study Club</h3>
             </div>
             <div class="nameTitle">
-                <h2>이름</h2>
+                <h5>이름</h5>
                 <input type="text" class="nameBox" placeholder="이름을 입력하세요" v-model.trim="memberName">
             </div>
             <div class="emailTitle">
-                <h2>이메일</h2>
+                <h5>이메일</h5>
                 <div class="confirmdiv">
                     <input type="text" id="emailBox" class="emailBox" placeholder="이메일을 입력하세요" v-model.trim="memberEmail">
                     <button class="confirm" :disabled="!memberEmail.trim()" @click="emailCheck()">확인</button>
                 </div> 
             </div>
             <div class="certificationTitle">
-                <h2>인증번호</h2>
+                <h5>인증번호</h5>
                 <div class="confirmdiv">
                     <input type="text" id="certificationBox" class="certificationBox" placeholder="인증번호를 입력하세요" v-model.trim="certification">
                     <button class="trans" id="transBox" @click="emailSend()" disabled>전송</button>
@@ -24,16 +24,16 @@
                 </div>
             </div>
             <div class="pwdTitle">
-                <h2>비밀번호</h2>
+                <h5>비밀번호</h5>
                 <input type="password" class="pwdBox" placeholder="비밀번호를 입력하세요" v-model.trim="memberPassword">
                 <p>*특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내로 작성</p>
             </div>
             <div class="pwdConfirm">
-                <h2>비밀번호 확인</h2>
+                <h5>비밀번호 확인</h5>
                 <input type="password" class="pwdConfirmBox" placeholder="비밀번호를 확인하세요" v-model.trim="passwordConfirm">
             </div>
             <div class="nicknameTitle">
-                <h2>닉네임</h2>
+                <h5>닉네임</h5>
                 <div class="confirmdiv">
                     <input type="text" class="nicknameBox" placeholder="닉네임을 입력하세요" v-model.trim="memberNickname">
                     <button class="confirm" id="nicknameBox" :disabled="!memberNickname.trim()" @click="nicknameCheck()">확인</button>

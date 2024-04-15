@@ -1,12 +1,10 @@
 <template>
-    <Header/>
 
     <div class="wrapper">
         <section>
             <login></login>
         </section>
     </div>
-    <Footer/>
 </template>
 
 <script setup>

@@ -55,6 +55,8 @@ const router = createRouter({
         {
             path: '/chat/list',
             component: () => import('@/views/ChatRoomList.vue')
+        },
+        {
 
             path: '/member-schedule/:studyclubId/:memberId',
             component: () => import('@/components/Schedule/MemberSchedule.vue')
