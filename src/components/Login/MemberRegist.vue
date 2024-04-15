@@ -67,7 +67,7 @@ let nicknamecheck = false;
 let email;
 
 const regist = async () => {
-    await axios.post("/api/user/regist",{   
+    await axios.post("http://localhost:8080/user/regist",{   
         memberEmail: memberEmail.value,
         memberPassword: memberPassword.value,
         memberName: memberName.value,

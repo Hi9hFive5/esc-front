@@ -69,6 +69,40 @@ function moveBack() {
     router.push('/chat/list');
 }
 
+// 토큰 관련
+
+
+const userInfo = ref(null);
+const loaded = ref(false);
+
+function decodeBase64(str) {
+    const decoded = atob(str);
+    return JSON.parse(decoded);
+}
+
+function fetchUserInfo(token) {
+    const tokenParts = token.split('.');
+
+    if (tokenParts.length === 3) {
+        const payload = decodeBase64(tokenParts[1]);
+        axios.get(`/api/user/info/${payload.sub}`)
+            .then(response => {
+                userInfo.value = response.data;
+                console.log(userInfo.value);
+            })
+            .catch(error => {
+                console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
+            })
+            .finally(() => {
+                loaded.value = true;
+            });
+    } else {
+        console.error('잘못된 형식의 JWT 토큰입니다.');
+    }
+}
+
+//
+
 onMounted(async () => {
 
     const response = await axios.get(`http://localhost:8080/chat/room/id/${roomId.params.id}`);
@@ -98,10 +132,19 @@ onMounted(async () => {
         });
         console.log('message:', messages.value);        // parsedMessage가 전부 쌓이는 구조 
         console.log('Got a message from the WS: ', parsedMessage);
-        
+
     }
 
     watch(messages.value, scrollToBottom);
+
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        fetchUserInfo(token);
+
+    } else {
+        console.error('토큰이 없습니다.');
+    }
 })
 
 function scrollToBottom() {
@@ -126,7 +169,7 @@ function send() {
     if (newMessage.value.length > 0) {
         const newChatMessage = {
             id: messages.value.length + 1,
-            sender: 'me',   // 토큰에서 닉네임 가져와서 넣기 
+            sender: userInfo.value.nickname,   // 토큰에서 닉네임 가져와서 넣기 
             text: newMessage.value,
             primary: true, // 내가 보낸 메시지는 오른쪽에 표시됨
             date: moment().format('YY.MM.DD hh:mm'),
