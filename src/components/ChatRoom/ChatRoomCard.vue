@@ -9,7 +9,6 @@
                     <div id="chatRooName">
                         {{ room.roomName }}
                     </div>
-
                 </div>
             </div>
         </div>
@@ -26,10 +25,9 @@
 
 
     function openChat(roomId) {
-        const uniqueName = `chat_${new Date().getTime()}`;
-        console.log("props.room", room)
-        
-        window.open(`http://localhost:5173/chat/room/${roomId}`, uniqueName, "width=500, height=600")
+        // const uniqueName = `chat_${new Date().getTime()}`;
+        router.push(`/chat/room/${roomId}`)
+        // window.open(`http://localhost:5173/chat/room/${roomId}`, 'uniqueName', "width=500, height=800")
     }
 </script>
 
@@ -38,6 +36,9 @@
     display: flex;
     flex-direction: row;
     width: 100%;
+    cursor: pointer;
+    filter: blur(0.3px);
+    border-color: #1c19e3;
 }
 
 .postCard :hover {

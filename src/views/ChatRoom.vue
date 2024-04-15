@@ -1,34 +1,53 @@
 <template>
-    <div id="app" class="chatbox">
-        <div class="colorPanel"
-            :style="{ display: colorPanelShown ? 'flex' : 'none', opacity: colorPanelShown ? 'flex' : 'none' }">
-            <div v-for="color in colors" class="colorPanel__colorSlot">
-                <div class="colorPanel__color" :style="{ background: color }" @click="setColor(color)"></div>
-            </div>
-        </div>
-        <div class="chatbox__header">
-            <div class="chatbox__headerText">
-                {{ roomName }}
-                <div class="chatbox__onlineDot"></div>
-            </div>
-            <div class="chatbox__button" @click="colorPanelShown = !colorPanelShown"></div>
-        </div>
-        <div class="chatbox__messages">
-            <div v-for="message in messages" :key="message.id" class="chatbox__messageBox"
-                :class="{ 'chatbox__messageBox--primary': message.primary }">
-                <div> {{ message.sender}}</div>
-                <div class="chatbox__message" :class="{ 'chatbox__message--primary': message.primary }"
-                    :style="{ background: chatColor }">
-                    {{ message.text }}
+    <div class="container">
+        <div class="chatbox-header">
+            <div class="colorPanel"
+                :style="{ display: colorPanelShown ? 'flex' : 'none', opacity: colorPanelShown ? 'flex' : 'none' }">
+                <div v-for="color in colors" class="colorPanel__colorSlot">
+                    <div class="colorPanel__color" :style="{ background: color }" @click="setColor(color)"></div>
                 </div>
-                
-                <div class="chatbox__tooltip chatbox__tooltip--left">{{ message.date }}</div>
+            </div>
+            <div class="chatbox__header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-box-arrow-left room-out" viewBox="0 0 16 16" @click="moveBack">
+                    <path fill-rule="evenodd"
+                        d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z" />
+                    <path fill-rule="evenodd"
+                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z" />
+                </svg>
+                <div class="chatbox__headerText">
+                    {{ roomName }}
+                    <div> ({{ sessionNo }})</div>
+                    <div class="chatbox__onlineDot"></div>
+                </div>
+                <div class="chatbox__button" :style="{ background: chatColor }"
+                    @click="colorPanelShown = !colorPanelShown"></div>
             </div>
         </div>
-        <div class="chatbox__inputPanel">
-            <input v-model="newMessage" @keyup.enter="send" class="chatbox__input" placeholder="메세지를 입력해주세요 !" />
-            <div class="chatbox__tooltip chatbox__tooltip--bottom"
-                :style="{ opacity: newMessage.length > 2 && !tutorialSeen ? 0.7 : 0 }">Enter!
+        <div id="app" class="chatbox">
+            <div class="chatbox__messages">
+                <div v-for="message in messages" :key="message.id" class="chatbox__messageBox"
+                    :class="{ 'chatbox__messageBox--primary': message.primary }">
+                    <div class="chatbox-sender" :class="{ 'chatbox__sender--primary': message.primary }"> {{
+                        message.sender }} </div>
+                    <div class="chat-message" :class="{ 'chat-message--primary': message.primary }">
+                        <div class="chatbox__message" :class="{ 'chatbox__message--primary': message.primary }"
+                            :style="{ background: chatColor }">
+                            {{ message.text }}
+                        </div>
+                        <div class="chatbox__date" :class="{ 'chatbox__date--primary': message.primary }">
+                            {{ message.date }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="chatbox-input">
+            <div class="chatbox__inputPanel">
+                <input v-model="newMessage" @keyup.enter="send" class="chatbox__input" placeholder="메세지를 입력해주세요 !" />
+                <div class="chatbox__tooltip chatbox__tooltip--bottom"
+                    :style="{ opacity: newMessage.length > 2 && !tutorialSeen ? 0.7 : 0 }">Enter!
+                </div>
             </div>
         </div>
     </div>
@@ -37,15 +56,21 @@
 <script setup>
 import moment from 'moment';
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
 
 const socket = ref(null);
 const roomId = useRoute();
 const roomName = ref('');
+const router = useRouter();
+
+function moveBack() {
+    router.push('/chat/list');
+}
 
 onMounted(async () => {
-    
+
     const response = await axios.get(`http://localhost:8080/chat/room/id/${roomId.params.id}`);
     const name = ref(response.data.roomName);
     roomName.value = name.value;
@@ -64,17 +89,28 @@ onMounted(async () => {
                 id: messages.value.length + 1,
                 sender: msg.sender, // 발신자 정보 추가
                 text: msg.text,
-                primary: false, // 발신자가 'me'일 경우 true, 아니면 false
-                date: moment().format('hh:mm')
+                primary: false, // 발신자 = 수신자일 경우 true, 아니면 false
+                date: moment().format('YY.MM.DD hh:mm'),
+                sessionNo: msg.sessionNo
             };
+            sessionNo.value = msg.sessionNo;
             messages.value.push(newChatMessage);
         });
-        console.log('message:', messages.value);
+        console.log('message:', messages.value);        // parsedMessage가 전부 쌓이는 구조 
         console.log('Got a message from the WS: ', parsedMessage);
+        
     }
+
+    watch(messages.value, scrollToBottom);
 })
 
-const chatColor = ref('#c5e1a5'); // 메시지 배경색 설정
+function scrollToBottom() {
+    const wrapper = document.querySelector(".chatbox");
+    wrapper.scrollTop = wrapper.scrollHeight;
+}
+
+
+const chatColor = ref('#0084ff'); // 메시지 배경색 설정
 const colorPanelShown = ref(false);
 const newMessage = ref('');
 const tutorialSeen = ref(false);
@@ -84,7 +120,7 @@ const colors = ref([
     '#fa3c4c', '#f56b78', '#33343f'
 ]);
 const messages = ref([]);
-
+const sessionNo = ref(0);
 
 function send() {
     if (newMessage.value.length > 0) {
@@ -93,7 +129,8 @@ function send() {
             sender: 'me',   // 토큰에서 닉네임 가져와서 넣기 
             text: newMessage.value,
             primary: true, // 내가 보낸 메시지는 오른쪽에 표시됨
-            date: moment().format('hh:mm')
+            date: moment().format('YY.MM.DD hh:mm'),
+            sessionNo: 0
         };
         messages.value.push(newChatMessage);
         socket.value.send(JSON.stringify([newChatMessage]));
@@ -106,6 +143,8 @@ function setColor(color) {
     chatColor.value = color;
     colorPanelShown.value = false;
 }
+
+
 </script>
 
 <style scoped>
@@ -114,6 +153,59 @@ function setColor(color) {
 body {
     margin: 0;
     font-family: 'Roboto';
+}
+
+.room-out {
+    margin: 0 0 0 10px;
+}
+
+.room-out:hover {
+    cursor: pointer;
+}
+
+.chat-message {
+    display: flex;
+    align-items: flex-end;
+}
+
+.chat-message--primary {
+    align-items: flex-end;
+    flex-direction: row-reverse;
+}
+
+.container {
+    display: block;
+    position: relative;
+    max-width: 700px;
+    min-width: 400px;
+    margin: 30px auto;
+    padding: 10px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 30px #eee;
+    font-size: 17px;
+}
+
+.chatbox-header {
+    display: block;
+    position: relative;
+    max-width: 700px;
+    padding: 10px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 30px #eee;
+    font-size: 17px;
+}
+
+.chatbox-input {
+    display: block;
+    position: relative;
+    max-width: 700px;
+    padding: 10px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 30px #eee;
+    font-size: 17px;
 }
 
 .visible {
@@ -161,13 +253,20 @@ body {
 .chatbox {
     display: block;
     position: relative;
-    max-width: 400px;
-    margin: 70px auto;
+    max-width: 700px;
+    height: 500px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
     padding: 10px;
     background: white;
     border-radius: 15px;
     box-shadow: 0 0 30px #eee;
-    font-size: 17px;
+    font-size: 16px;
+}
+
+.chatbox::-webkit-scrollbar {
+    display: none;
 }
 
 @keyframes blinking {
@@ -255,15 +354,34 @@ body {
 }
 
 .chatbox__messageBox {
-    width: 100%;
+    /* width: 100%; */
     margin-top: 5px;
     position: relative;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
+.chatbox__sender--primary {
+    align-items: flex-end;
+}
 
 .chatbox__messageBox--primary {
-    flex-direction: row-reverse;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.chatbox__date {
+    position: relative;
+    background-color: white;
+    color: rgb(127, 125, 125);
+    font-size: 12px;
+    margin: 0 10px 0 10px;
+    opacity: 0.5;
+}
+
+.chatbox__date--primary {
+    background: white;
 }
 
 .chatbox__message {

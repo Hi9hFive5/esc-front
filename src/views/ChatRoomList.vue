@@ -1,8 +1,8 @@
 <template>
     <section>
         <div class="titleAndSearch">
-            <div class="board-title">
-                <h2 style="font-size: 30px;">채팅방 리스트</h2>
+            <div class="board-title" @click="resetList">
+                <h2>채팅방 리스트</h2>
             </div>
             <div class="search" id="search-1">
                 <div class="searchText">
@@ -14,8 +14,9 @@
                 </div>
 
                 <!-- Button to Open the Modal -->
-                <button type="button" class="btn btn-primary" id="newBtn" data-bs-toggle="modal" data-bs-target="#myModal">
-                    채팅방 생성 
+                <button type="button" class="btn btn-primary" id="newBtn" data-bs-toggle="modal"
+                    data-bs-target="#myModal">
+                    채팅방 생성
                 </button>
 
                 <div class="modal" id="myModal">
@@ -30,7 +31,8 @@
                             <div class="modal-body">
                                 <div>
                                     <input type="text" class="newRoomInput" v-model="newRoomName">
-                                    <button type="button" @click="createNewRoom" class="newRoomBtn" data-bs-dismiss="modal"> 생성하기 </button>
+                                    <button type="button" @click="createNewRoom" class="newRoomBtn"
+                                        data-bs-dismiss="modal"> 생성하기 </button>
                                 </div>
                             </div>
                         </div>
@@ -40,16 +42,19 @@
         </div>
         <article class="main-article">
             <hr>
-            <div v-if="isTrue">
-                <ChatRoomContainer />
+            <div class="chatWrapper">
+                <div v-if="isTrue">
+                    <ChatRoomContainer />
+                </div>
             </div>
-
         </article>
 
     </section>
 </template>
 
 <script setup>
+import Header from "@/components/Header/Login_Header.vue";
+import Footer from "@/components/Footer/Footer.vue";
 import { ref, provide } from 'vue';
 import ChatRoomContainer from '../components/ChatRoom/ChatRoomContainer.vue';
 import { useRouter } from 'vue-router';
@@ -62,7 +67,7 @@ const isTrue = ref(true);
 /* 입력한 정보 받아서 axios로 호출 */
 async function callData() {
 
-    console.log("실행 전 길이 :",roomList.value.length)
+    console.log("실행 전 길이 :", roomList.value.length)
     const getUrl = `http://localhost:8080/chat/room/title/${search_condition.value}`;
     console.log('getURL: ', getUrl)
 
@@ -71,7 +76,7 @@ async function callData() {
     roomList.value = response.data;
     console.log('roomList : ', roomList.value)
 
-    console.log("실행 후 길이 :",roomList.value.length)
+    console.log("실행 후 길이 :", roomList.value.length)
 
     if (roomList.value.length == 0) {
         isTrue.value = false;
@@ -89,14 +94,14 @@ function resetList() {
 }
 
 async function createNewRoom() {
-    
+
     const final = await axios.get(`http://localhost:8080/chat/room/last`);
     console.log(final.data);
     const newRoomId = final.data + 1;
     console.log('newRoomId', newRoomId);
 
-    await axios.post(`http://localhost:8080/chat/room`,{
-        id : newRoomId,
+    await axios.post(`http://localhost:8080/chat/room`, {
+        id: newRoomId,
         roomName: newRoomName.value,
         roomHostId: 1
     })
@@ -109,16 +114,31 @@ async function createNewRoom() {
 <style scoped>
 section {
     display: grid;
-    min-width: 100%;
+    min-width: 455px;
     min-height: 800px;
-    grid-template-columns: 0.8fr 3fr 0.8fr;
+    /* grid-template-columns: 0.8fr 3fr 0.8fr; */
+    grid-template-columns: 100%;
     grid-template-rows: 101.61px 5px auto;
     grid-template-areas:
-        "left  title   right"
+        /* "left  title   right"
         "left   none    right"
-        "left   main    right";
+        "left   main    right"; */
+        "   title   "
+        "   none    "
+        "   main    ";
     padding: 0;
     margin: 0;
+}
+
+.chatWrapper {
+    display: block;
+    position: relative;
+    padding: 10px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 30px #eee;
+    height: 500px;
+    overflow-y: scroll;
 }
 
 
@@ -228,7 +248,7 @@ h2 {
     width: 80%;
 }
 
-.newRoomBtn{
+.newRoomBtn {
     background-color: #000000;
     color: white;
     padding: 4px 10px;
