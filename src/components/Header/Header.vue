@@ -5,7 +5,7 @@
         </div>
         <div class="menu">
             <span>소개</span>
-            <span>모집</span>
+            <span @click="navigateTo('/recruit-regist/1')">모집</span>
             <span>스터디클럽</span>
             <span>마이페이지</span>
         </div>
@@ -24,11 +24,16 @@
 <script setup>
     import router from '@/router/router';
     import { ref, computed, watch, reactive, onMounted } from "vue";
+    import { useRouter } from 'vue-router';
 
     const token = ref(localStorage.getItem('token'));
 
     // 로그인 여부 계산
     const isLoggedIn = ref(!!token.value);
+
+    const navigateTo = (path) => {
+        router.push(path);
+    }
 
     // 페이지 로드 시 초기화
     onMounted(() => {
@@ -61,6 +66,11 @@
 </script>
 
 <style scoped>
+@font-face {
+        font-family: '감탄로드돋움체 Bold';
+        src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
+    }
+
 * {
     margin: 0;
     padding: 0;
@@ -162,6 +172,8 @@
     justify-items: center;
 }
 .menu span{
+    font-family: '감탄로드돋움체 Bold', sans-serif;
+    margin-left: 3%;
     cursor: pointer;
 }
 </style>
