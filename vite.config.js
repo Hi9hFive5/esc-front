@@ -13,6 +13,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  define: {
+    global: {},   // global is not defined 에러 해결을 위한 설정 추가 
+  },
   server: {
     proxy: {
       '/api': {

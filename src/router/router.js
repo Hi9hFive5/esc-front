@@ -49,6 +49,13 @@ const router = createRouter({
             component: () => import('@/components/Recruit/RecruitModify.vue')
         },
         {
+            path: '/chat/room/:id',
+            component: () => import('@/views/ChatRoom.vue')
+        },
+        {
+            path: '/chat/list',
+            component: () => import('@/views/ChatRoomList.vue')
+
             path: '/member-schedule/:studyclubId/:memberId',
             component: () => import('@/components/Schedule/MemberSchedule.vue')
         },
@@ -83,6 +90,7 @@ const router = createRouter({
         {
             path: '/studylog/:id',
             component: () => import('@/components/StudyLog/StudyLogPage.vue')
+
         }
     ]
 })
