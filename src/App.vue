@@ -1,5 +1,5 @@
 <script setup>
-    import Header from "@/components/Header/Login_Header.vue";
+    import Header from "@/components/Header/Header.vue";
     import Footer from "@/components/Footer/Footer.vue";
     import { RouterLink, RouterView, useRouter } from 'vue-router';
 
@@ -7,13 +7,16 @@
 </script>
 
 <template>
+    <div class="all">
         <Header></Header>
 
         <main class="wrapper">
             <RouterView />
         </main>
 
-        <Footer></Footer>  
+        <Footer></Footer> 
+    </div>
+        
 </template>
 
 
@@ -31,6 +34,13 @@ body * {
     margin-left:12.5%;
     margin-right:12.5%;
     width:75%;
+    display: grid;
 }
+
+.all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
 
 </style>
