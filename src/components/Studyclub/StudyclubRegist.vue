@@ -6,14 +6,17 @@
     const id = route.params.id;
 
     const state = reactive({
-        category: []
+        category: [],
+        exams: [],
+        goals: []
     })
 
     const name = ref();
     const introduce = ref();
     const memberLimit = ref();
-    const endDate = ref();
     const selectedCategory = ref();
+    const selectedExam = ref();
+    const selectedGoal = ref();
 
     const fetchCategory = async() => {
 
@@ -33,14 +36,50 @@
         }
     };
 
+    const fetchExams = async() => {
+
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/exam/${selectedCategory.value}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            state.exams = data;
+            
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    }
+
+
+    const fetchGoals = async() => {
+
+        try {
+            const response = await fetch(`http://localhost:8080/studyclub/goal/${selectedCategory.value}`);
+
+            if(!response.ok) {
+                throw new Error('response is not ok');
+            }
+
+            const data = await response.json();
+            state.goals = data;
+            
+        } catch(error) {
+            console.error('fetch error: ' + error.message);
+        }
+    }
+
     const registStudyClub = async() => {
         
         const postData = {
             name: name.value,
             introduce: introduce.value, 
             memberLimit: memberLimit.value,
-            endDate: endDate.value,
-            studyId: selectedCategory.value
+            studyId: selectedCategory.value,
+            examId: selectedExam.value,
+            goalId: selectedGoal.value
         }
 
         try {
@@ -80,15 +119,19 @@
                 <input type="number" class="content" v-model="memberLimit"/>
             </div>
             <div class="category">스터디클럽 카테고리: 
-                <select class="content" v-model="selectedCategory">
-                <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
-            </select>
+                <select class="content" v-model="selectedCategory" @change="fetchGoals(), fetchExams()">
+                    <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
+                </select>
             </div>
             <div class="date">스터디클럽 시험일: 
-                <input type="date" class="content" v-model="endDate">
+                <select class="content" v-model="selectedExam">
+                    <option v-for="item in state.exams" :value="item.id"> {{ item.examDate.substring(0, 10) }} </option>
+                </select>
             </div>
             <div class="goal">스터디클럽 목표 점수: 
-                <input type="text" class="content">
+                <select class="content" v-model="selectedGoal">
+                    <option v-for="item in state.goals" :value="item.id"> {{ item.score }} </option>
+                </select>
             </div>
             <div class="submit" @click="registStudyClub">
                 <button>등록하기</button>

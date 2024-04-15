@@ -13,6 +13,10 @@ const router = createRouter({
             component: () => import('../views/LoginPage.vue')
         },
         {
+            path: '/after/login',
+            component: () => import('../views/MainLogin.vue')
+        },
+        {
             path: '/regist',
             component: () => import('../views/Regist.vue')
         },
@@ -51,6 +55,42 @@ const router = createRouter({
         {
             path: '/chat/list',
             component: () => import('@/views/ChatRoomList.vue')
+
+            path: '/member-schedule/:studyclubId/:memberId',
+            component: () => import('@/components/Schedule/MemberSchedule.vue')
+        },
+        {
+            path: '/findId',
+            component: () => import('../views/FindIdPage.vue')
+        },
+        {
+            path: '/findIdResult/:email',
+            component: () => import('../views/FindIdResultPage.vue')
+        },
+        {
+            path: '/resetPassword',
+            component: () => import('../views/ResetPwdPage.vue')
+        },
+        {
+            path: '/resetPasswordFinal/:email',
+            component: () => import('../views/ResetPwdFinalPage.vue')
+        },
+        {
+            path: '/mypage/:id',
+            component: () => import('@/components/MyPage/MyPage.vue')
+        },
+        {
+            path: '/addstudylog/:id',
+            component: () => import('@/components/StudyLog/AddStudyLog.vue')
+        },
+        {
+            path: '/anotherpage/:id',
+            component: () => import('@/components/MyPage/AnotherPage.vue')
+        },
+        {
+            path: '/studylog/:id',
+            component: () => import('@/components/StudyLog/StudyLogPage.vue')
+
         }
     ]
 })

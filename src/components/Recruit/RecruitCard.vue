@@ -10,7 +10,9 @@ const props = defineProps({
 
 const state = reactive({
   studyclub: {},
-  category: ""
+  category: "",
+  goal: {},
+  exam: {}
 });
 
 const recruitDetail = (id) => {
@@ -28,7 +30,6 @@ const fetchStudyclub = async(id) => {
       const data = await response.json();
 
       state.studyclub = data;
-      state.studyclub["endDate"] = splitDate(state.studyclub["endDate"]);
       props.recruit["createdDate"] = splitDate(props.recruit["createdDate"]);
 
   } catch(error) {
@@ -52,8 +53,41 @@ const fetchCategory = async(id) => {
   }
 }
 
-const splitDate = async(date) => {
-   return date.slice(0, 10);
+const fetchExam = async(id) => {
+  try {
+        const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
+
+        if(!response.ok) {
+            throw new Error('response is not ok');
+        }
+
+        const data = await response.json();
+        state.exam = data;
+        state.exam["examDate"] = splitDate(state.exam["examDate"])
+
+    } catch(error) {
+        console.error('fetch error: ' + error.message);
+    }
+}
+
+const fetchGoal = async(id) => {
+  try {
+      const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+
+      if(!response.ok) {
+          throw new Error('response is not ok');
+      }
+
+      const data = await response.json();
+      state.goal = data;
+
+  } catch(error) {
+      console.error('fetch error: ' + error.message);
+  }
+}
+
+const splitDate = (date) => {
+   return date.substring(0, 10);
 }
 
 const hovering = ref(false);
@@ -64,8 +98,9 @@ const setHover = (value) => {
 
 onMounted(async() => {
   await fetchStudyclub(props.recruit.clubId);
-  await fetchCategory(state.studyclub.studyId);
-  await splitDate();
+  await fetchCategory(state.studyclub.id);
+  await fetchGoal(state.studyclub.id);
+  await fetchExam(state.studyclub.id);
 });
 </script>
 
@@ -80,14 +115,14 @@ onMounted(async() => {
       </template>
       <div class="category">
         <span class="highlight">#</span> {{ state.category["studyName"] }} &nbsp;
-        <span class="highlight">#</span>900
+        <span class="highlight">#</span> {{ state.goal["score"] }}
       </div>
     </div>
     <div class="content">
       <div class="title-area">
         <div class="title">{{ recruit.title }}</div>
         <div class="club-name">{{ state.studyclub["name"] }}</div>
-        <div class="date">{{ state.studyclub["endDate"] }}</div>
+        <div class="date">{{ state.exam["examDate"] }}</div>
       </div>
       <div class="user-area">
         <div class="user">{{ recruit.writerId }}</div>
