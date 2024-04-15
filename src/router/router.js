@@ -67,6 +67,22 @@ const router = createRouter({
         {
             path: '/resetPasswordFinal/:email',
             component: () => import('../views/ResetPwdFinalPage.vue')
+        },
+        {
+            path: '/mypage/:id',
+            component: () => import('@/components/MyPage/MyPage.vue')
+        },
+        {
+            path: '/addstudylog/:id',
+            component: () => import('@/components/StudyLog/AddStudyLog.vue')
+        },
+        {
+            path: '/anotherpage/:id',
+            component: () => import('@/components/MyPage/AnotherPage.vue')
+        },
+        {
+            path: '/studylog/:id',
+            component: () => import('@/components/StudyLog/StudyLogPage.vue')
         }
     ]
 })
