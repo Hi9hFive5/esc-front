@@ -13,7 +13,7 @@
     const fetchRecruitPost = async(id) => {
 
         try {
-            const response = await fetch(`http://localhost:8080/recruit/detail/${id}`);
+            const response = await fetch(`/api/recruit/detail/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -37,7 +37,7 @@
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/recruit/modify/${id}`, {
+            const response = await fetch(`/api/recruit/modify/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

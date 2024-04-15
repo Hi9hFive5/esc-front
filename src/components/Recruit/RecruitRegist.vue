@@ -17,7 +17,7 @@
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/recruit/regist/${id}`, {
+            const response = await fetch(`http://localhost:8000/recruit/regist/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

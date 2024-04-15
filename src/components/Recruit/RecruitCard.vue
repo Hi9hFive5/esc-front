@@ -21,7 +21,7 @@ const recruitDetail = (id) => {
 
 const fetchStudyclub = async(id) => {
   try {
-    const response = await fetch(`http://localhost:8080/studyclub/detail/${id}`);
+    const response = await fetch(`/api/studyclub/detail/${id}`);
 
     if(!response.ok) {
         throw new Error('response is not ok');
@@ -39,7 +39,7 @@ const fetchStudyclub = async(id) => {
 
 const fetchCategory = async(id) => {
   try {
-    const response = await fetch(`http://localhost:8080/studyclub/category/${id}`);
+    const response = await fetch(`/api/studyclub/category/${id}`);
 
     if(!response.ok) {
         throw new Error('response is not ok');
@@ -55,7 +55,7 @@ const fetchCategory = async(id) => {
 
 const fetchExam = async(id) => {
   try {
-        const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
+        const response = await fetch(`/api/studyclub/study-exam/${id}`);
 
         if(!response.ok) {
             throw new Error('response is not ok');
@@ -72,7 +72,7 @@ const fetchExam = async(id) => {
 
 const fetchGoal = async(id) => {
   try {
-      const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+      const response = await fetch(`/api/studyclub/study-goal/${id}`);
 
       if(!response.ok) {
           throw new Error('response is not ok');
