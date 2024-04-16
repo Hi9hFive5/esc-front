@@ -42,11 +42,11 @@
     const id = route.params.id;
 
     const state = reactive({
-        recruit: {},
-        studyclub: {},
-        category: {},
-        exam: {},
-        writer: {}
+      recruit: {},
+      studyclub: {},
+      category: {},
+      exam: {},
+      writer: {}
     });
 
     const fetchRecruit = async(id) => {

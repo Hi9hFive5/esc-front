@@ -39,12 +39,13 @@ const fetchStudyclub = async(id) => {
 
 const fetchCategory = async(id) => {
   try {
-    const response = await fetch(`/api/studyclub/category/${id}`);
+    const response = await fetch(`/api/studyclub/study-category/${id}`);
 
     if(!response.ok) {
         throw new Error('response is not ok');
       }
 
+      console.log(state.category);
       const data = await response.json();
       state.category = data;
 
