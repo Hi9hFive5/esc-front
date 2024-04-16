@@ -9,6 +9,7 @@
     const userInfo = ref(null);
     const loaded = ref(false); 
     const modifyCheck = ref(false);
+    let loginCheck = false;
 
     function decodeBase64(str) {
         const decoded = atob(str);
@@ -171,7 +172,7 @@
 
         if (token) {
         fetchUserInfo(token);
-
+        loginCheck=true;
         } else {
         console.error('토큰이 없습니다.');
         }
@@ -216,7 +217,7 @@
             </div>
             <hr>
             <div class="submit">
-                <button class="applybtn" @click="applyRecruit(userId, id)">신청하기</button>
+                <button class="applybtn" v-if="loginCheck" @click="applyRecruit(userId, id)">신청하기</button>
             </div>
         </div>
     </div>

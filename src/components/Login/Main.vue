@@ -33,7 +33,7 @@
             <img src="@/assets/alphabet.png" style="margin-top: 30px">
             <div class="description">
                 <div style="font-size: 25px;">"함께 성장하는 영어 자격증 스터디, 지금 시작하세요!"</div>
-                <div class="button">스터디클럽 생성하러 가기</div>       
+                <div class="button" @click="loginCheck2">스터디클럽 생성하러 가기</div>       
             </div>
         </div>
     </div>
@@ -58,6 +58,17 @@ function loginCheck() {
         alert('로그인이 필요합니다.')
         return false;
     }
+}
+
+function loginCheck2() {
+
+if (token) {
+    router.push(`/studyclub-regist/${userInfo.value.id}`);
+
+} else {
+    alert('로그인이 필요합니다.')
+    return false;
+}
 }
 
 const userInfo = ref(null);

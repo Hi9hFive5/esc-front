@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <div class="section">
-            <div class="section-title">
+        <div class="boxdiv">
+            <div class="contentdiv">
                 멤버
                 <RouterLink v-for="userinfo in userinfos" :to="{ path: `/anotherpage/${userinfo.id}` }"
                     :key="userinfo.id">
@@ -9,8 +9,8 @@
                 </RouterLink>
             </div>
         </div>
-        <div class="section">
-            <div class="section-title">
+        <div class="boxdiv">
+            <div class="contentdiv">
 
                 <div class="log">
                     로그
@@ -24,15 +24,15 @@
                 </RouterLink>
             </div>
         </div>
-        <div class="section">
-            <div class="section-title">
+        <div class="boxdiv">
+            <div class="contentdiv">
                 <div class="title">스터디 일정 목록</div>
-                <div class="button-container">
-                    <button class="add-btn" @click.stop="viewCalendar()">+ 일정 추가</button>
-                    <button class="add-btn" @click.stop="viewSchedule()">+ 더보기</button>
+                <div class="buttondiv">
+                    <button class="added" @click.stop="viewCalendar()">+ 일정 추가</button>
+                    <button class="added" @click.stop="viewSchedule()">+ 더보기</button>
                 </div>
-                <div v-for="(row, index) in schedules" class="list">
-                    <div class="list-item">
+                <div v-for="(row, index) in schedules" class="things">
+                    <div class="items">
                         <span>{{ index + 1 }}. {{ row.title }}</span>
                         <!-- <button class="detail-btn" @click.stop="navigateToDetail(row.id)">상세</button> -->
                     </div>
@@ -184,7 +184,11 @@ const viewSchedule = () => {
     margin-top: 60px;
 }
 
-.section {
+.contentdiv {
+    text-align: center;
+}
+
+.boxdiv {
     border: 1px solid black;
     height: 300px;
 }

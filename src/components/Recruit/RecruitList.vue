@@ -9,6 +9,7 @@
     const router = useRouter();
     const userInfo = ref(null);
     const loaded = ref(false); 
+    let loginCheck = false;
 
     const navigateTo = (path) => {
         router.push(path);
@@ -93,6 +94,7 @@
 
         if (token) {
         fetchUserInfo(token);
+        loginCheck = true;
         } else {
         console.error('토큰이 없습니다.');
         }
@@ -116,7 +118,7 @@
             <select class="category" v-model="selectedCategory">
                 <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
             </select>
-            <div class="fixed" @click="makeStudyClub()">스터디클럽 생성하기</div>
+            <div class="fixed" v-if="loginCheck" @click="makeStudyClub()">스터디클럽 생성하기</div>
         </div>
         <div>
             <RecruitCard class="card" v-for="recruit in state.recruitList" :key="recruit.id" :recruit="recruit"></RecruitCard>

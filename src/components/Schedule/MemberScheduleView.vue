@@ -1,7 +1,9 @@
 <template>
+    <Header></Header>
     <div id="app">
         <div id="calendar"></div>
     </div>
+    <Footer></Footer>
 </template>
 
 <script setup>
@@ -9,6 +11,8 @@
     import interactionPlugin from '@fullcalendar/interaction';
     import timeGridPlugin from '@fullcalendar/timegrid';
     import moment from 'moment';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
 
     import axios from 'axios'
     import { onMounted, ref } from 'vue'

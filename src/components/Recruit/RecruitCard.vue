@@ -12,7 +12,8 @@ const state = reactive({
   studyclub: {},
   category: "",
   goal: {},
-  exam: {}
+  exam: {},
+  writer: {}
 });
 
 const recruitDetail = (id) => {
@@ -37,9 +38,25 @@ const fetchStudyclub = async(id) => {
   }
 }
 
+const fetchWriter = async(id) => {
+        try {
+                const response = await fetch(`/api/user/${id}`);
+
+                if(!response.ok) {
+                    throw new Error('response is not ok');
+                }
+
+                const data = await response.json();
+                state.writer = data;
+
+            } catch(error) {
+                console.error('fetch error: ' + error.message);
+            }
+    }
+
 const fetchCategory = async(id) => {
   try {
-    const response = await fetch(`/api/studyclub/category/${id}`);
+    const response = await fetch(`/api/studyclub/study-category/${id}`);
 
     if(!response.ok) {
         throw new Error('response is not ok');
@@ -101,6 +118,7 @@ onMounted(async() => {
   await fetchCategory(state.studyclub.id);
   await fetchGoal(state.studyclub.id);
   await fetchExam(state.studyclub.id);
+  await fetchWriter(state.studyclub.id);
 });
 </script>
 
@@ -125,7 +143,7 @@ onMounted(async() => {
         <div class="date">{{ state.exam["examDate"] }}</div>
       </div>
       <div class="user-area">
-        <div class="user">{{ recruit.writerId }}</div>
+        <div class="user">{{ state.writer["nickname"] }}</div>
         <div class="count">{{ state.studyclub["memberCount"] }}명 / {{ state.studyclub["memberLimit"] }}명</div>
         <div class="date">{{ recruit.createdDate }}</div>
       </div>
@@ -187,7 +205,7 @@ onMounted(async() => {
 }
 .user {
   height: 40px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin: 5px;
 }
 .count {
@@ -200,5 +218,10 @@ onMounted(async() => {
 }
 .highlight {
   color: rgba(14, 94, 222, 0.884);
+}
+.user-area {
+  display: grid;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr;
+  justify-items: start;
 }
 </style>

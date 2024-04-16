@@ -4,6 +4,8 @@
     import { useRoute, useRouter } from "vue-router";
     import axios from 'axios';
     import moment from 'moment';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
     // import Save from "@/components/StudyScheduleSave.vue";
     // import { StudyScheduleInfo as Info } from "@/components/Schedule/StudyScheduleInfo.vue";
     
@@ -65,25 +67,33 @@
 </script>
 
 <template> 
-  <div class="container">
-    <div class="scheduleTitle">스터디 일정 목록</div>
-    <div class="button-container">
-      <!-- <button class="add-btn" @click.stop="newSchedule()">+ 추가하기</button> -->
-    </div>
-    <div v-for="(row, index) in schedules" class="list">
-      <div class="list-item">
-        <div class="item">
-          <div class="rowTitle">{{ index + 1 }}. {{ row.title }}</div>
-          <div class="Time">
-            <div class="rowTime">시작시간: {{ row.start }}</div>
-            <div class="rowTime">종료시간: {{ row.end }}</div>
-          </div>
+<div class="all">
+  <Header></Header>
+  <div class="wrapper">
+    <div class="container">
+        <div class="scheduleTitle">스터디 일정 목록</div>
+        <div class="buttonBox">
+          <!-- <button class="add-btn" @click.stop="newSchedule()">+ 추가하기</button> -->
         </div>
-        <button class="detail-btn" @click.stop="navigateToDetail(row.id)">상세</button>
-      </div>        
+        <div v-for="(row, index) in schedules" class="list">
+          <div class="list-item">
+            <div class="item">
+              <div class="rowTitle">{{ index + 1 }}. {{ row.title }}</div>
+              <div class="Time">
+                <div class="rowTime">시작시간: {{ row.start }}</div>
+                <div class="rowTime">종료시간: {{ row.end }}</div>
+              </div>
+            </div>
+            <button class="deatils" @click.stop="navigateToDetail(row.id)">상세</button>
+          </div>        
+        </div>
       </div>
-    </div>
-  <!-- </div> -->
+  </div>
+      
+    <Footer></Footer>
+</div>
+    
+
 </template>
 
 <style>
@@ -95,12 +105,23 @@
         align-items: center;
         margin: 30px;
     }
+    .wrapper {
+        margin-left:12.5%;
+        margin-right:12.5%;
+        width:75%;
+        display: grid;
+    }
+    .all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: start;
+        }
     .scheduleTitle {
         font-size: 30px;
         text-align: center;
         margin-top: 50px;
     }
-    .button-container {
+    .buttonBox {
         width: 100%;
         display: flex;
         justify-content: flex-end;
@@ -140,7 +161,7 @@
       padding: 10px;
       font-size: 15px;
     }
-    .detail-btn {
+    .deatils {
         padding: 5px 10px;
         background-color: #4CAF50;
         color: white;
@@ -148,4 +169,5 @@
         border-radius: 4px;
         cursor: pointer;
     }
+    
 </style>

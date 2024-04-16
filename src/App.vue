@@ -15,17 +15,8 @@
 
 <template>
     
-    
-    <div class="all">
-
-        <main class="wrapper">
-            <RouterView />
-        </main>
-
-    </div>
-
-    
-        
+    <RouterView />
+           
 </template>
 
 

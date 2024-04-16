@@ -7,7 +7,7 @@
             <span @click="navigateTo('/')">소개</span>
             <span @click="navigateTo('/recruit-list')">모집</span>
             <span>스터디클럽</span>
-            <span @click="navigateTo(`/mypage/${userInfo.id}`)">마이페이지</span>
+            <span @click="myPage()">마이페이지</span>
         </div>
         <div class="loginbtndiv" v-if="isLoggedIn">
             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-wechat chat-icon"
@@ -35,6 +35,7 @@
     import axios from "axios";
 
     const token = ref(localStorage.getItem('token'));
+    let loginCheck = false;
 
     // 로그인 여부 계산
     const isLoggedIn = ref(!!token.value);
@@ -42,6 +43,14 @@
     const navigateTo = (path) => {
         router.push(path);
     }
+
+    function myPage() {
+        if (loginCheck == true) {
+            router.push(`/mypage/${userInfo.value.id}`)
+        } else {
+            alert('로그인이 필요합니다.')
+        }
+    } 
 
     const userInfo = ref(null);
     const loaded = ref(false); 
@@ -79,7 +88,7 @@
         // isLoggedIn.value = !!token.value;
         if (token) {
         fetchUserInfo(token);
-
+        loginCheck = true;
         } else {
         console.error('토큰이 없습니다.');
         }

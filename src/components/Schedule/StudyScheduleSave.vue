@@ -4,6 +4,8 @@
     import { useRoute, useRouter } from 'vue-router';
     import axios from 'axios';
     import moment from 'moment';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
     
     const route = useRoute();
     const router = useRouter();
@@ -122,6 +124,7 @@
 </script>
 
 <template>
+    <Header></Header>
     <div class="container">
         <div class="title">스터디 일정 등록</div>
         <div class="info">
@@ -151,6 +154,7 @@
             </div>
         </div> 
     </div>
+    <Footer></Footer>
 </template>
 
 <style scoped>

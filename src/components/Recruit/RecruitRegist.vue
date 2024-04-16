@@ -55,7 +55,7 @@
                         <textarea placeholder="본문" style="width: 500px" rows="20" v-model="content"></textarea>
                     </div>
                 </div>
-                <div class="submit" @click="registRecruit"><button>등록하기</button></div>
+                <div class="submit" @click="registRecruit()"><button>등록하기</button></div>
             </div>
         </div> 
         <Footer></Footer>

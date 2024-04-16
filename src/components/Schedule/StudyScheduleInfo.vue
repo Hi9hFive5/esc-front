@@ -4,6 +4,8 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from 'axios';
 import moment from 'moment';
+import Header from "@/components/Header/Header.vue";
+import Footer from "@/components/Footer/Footer.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -147,47 +149,56 @@ async function removeParticipant(id) {
 </script>
 
 <template>
-    <div class="container">
-        <div class="title">스터디 일정</div>
-        <div class="info">
-            <div class="name">제목:
-                <input v-if="!isReadOnly" class="content" v-model="title" />
-                <span v-else class="content">{{ title }}</span>
-            </div>
-            <div class="introduce">내용: </div>
-            <textarea v-if="!isReadOnly" class="content" cols="50" rows="5" v-model="content" />
-            <span v-else>{{ content }}</span>
-            <div class="date">시작 시간:
-                <input v-if="!isReadOnly" type="datetime-local" class="content" v-model="start">
-                <span v-else>{{ start }}</span>
-            </div>
-            <div class="date">종료 시간:
-                <input v-if="!isReadOnly" type="datetime-local" class="content" v-model="end">
-                <span v-else>{{ end }}</span>
-            </div>
-            <div class="member">참여 멤버:
-                <div v-if="!isReadOnly">
-                <select class="content" v-model="selectMember"
-                    @change="addParticipant(selectMember.id)">
-                    <option disabled value="">선택해주세요</option>
-                    <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
-                </select>
-                <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
-                    <div>{{ item.name }}</div>
-                    <button @click="removeParticipant(item.id)">삭제</button>
+    <div class="all">
+        <Header></Header>
+        <div class="wrapper">
+            <div class="container">
+                <div class="title">스터디 일정</div>
+                <div class="info">
+                    <div class="name">제목:
+                        <input v-if="!isReadOnly" class="content" v-model="title" />
+                        <span v-else class="content">{{ title }}</span>
+                    </div>
+                    <div class="introduce">내용: </div>
+                    <textarea v-if="!isReadOnly" class="content" cols="50" rows="5" v-model="content" />
+                    <span v-else>{{ content }}</span>
+                    <div class="date">시작 시간:
+                        <input v-if="!isReadOnly" type="datetime-local" class="content" v-model="start">
+                        <span v-else>{{ start }}</span>
+                    </div>
+                    <div class="date">종료 시간:
+                        <input v-if="!isReadOnly" type="datetime-local" class="content" v-model="end">
+                        <span v-else>{{ end }}</span>
+                    </div>
+                    <div class="member">참여 멤버:
+                        <div v-if="!isReadOnly">
+                        <select class="content" v-model="selectMember"
+                            @change="addParticipant(selectMember.id)">
+                            <option disabled value="">선택해주세요</option>
+                            <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
+                        </select>
+                        <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
+                            <div>{{ item.name }}</div>
+                            <button @click="removeParticipant(item.id)">삭제</button>
+                        </div>
+                        </div>
+                        <div v-else class="selectedMember" v-for="item in selectedMembers" :value="item.id">
+                            <div>{{ item.name }}</div>
+                        </div>
+                    </div>
+                    <div class="submit">
+                        <button v-if="!isReadOnly" @click="saveStudySchedule()">저장하기</button>
+                        <button v-if="!isReadOnly" @click="removeStudySchedule()">삭제하기</button>
+                        <button v-else @click="isReadOnly = false">수정하기</button>
+                    </div>
                 </div>
-                </div>
-                <div v-else class="selectedMember" v-for="item in selectedMembers" :value="item.id">
-                    <div>{{ item.name }}</div>
-                </div>
-            </div>
-            <div class="submit">
-                <button v-if="!isReadOnly" @click="saveStudySchedule()">저장하기</button>
-                <button v-if="!isReadOnly" @click="removeStudySchedule()">삭제하기</button>
-                <button v-else @click="isReadOnly = false">수정하기</button>
             </div>
         </div>
+           
+    <Footer></Footer>
     </div>
+    
+
 </template>
 
 <style scoped>
@@ -228,4 +239,15 @@ async function removeParticipant(id) {
         justify-content: space-between;
         align-items: center;
 }
+.wrapper {
+    margin-left:12.5%;
+    margin-right:12.5%;
+    width:75%;
+    display: grid;
+}
+.all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
 </style>
