@@ -1,5 +1,6 @@
 <script setup>
     // 추후 모달로 변경
+    import router from "@/router/router";
     import { ref } from "vue";
     import { useRoute } from 'vue-router';
 
@@ -17,7 +18,7 @@
         }
 
         try {
-            const response = await fetch(`http://localhost:8000/recruit/regist/${id}`, {
+            const response = await fetch(`/api/recruit/regist/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,6 +29,10 @@
             if(!response) {
                 throw new Error('Network response was not ok');
             }
+
+            alert("모집글이 등록되었습니다!");
+            router.push("/recruit-list");
+
         } catch(error) {
             console.error('There was a problem with the fetch operation:', error.message);
         }

@@ -4,10 +4,10 @@
             <img src="../../assets/finalLogo.png" @click="main()" class="logoimage">
         </div>
         <div class="menu">
-            <span>소개</span>
+            <span @click="navigateTo('/')">소개</span>
             <span @click="navigateTo('/recruit-list')">모집</span>
             <span>스터디클럽</span>
-            <span>마이페이지</span>
+            <span @click="navigateTo(`/mypage/${userInfo.id}`)">마이페이지</span>
         </div>
         <div class="loginbtndiv" v-if="isLoggedIn">
             <button type="button" class="logoutBtn" @click="logout()">logout</button>
@@ -25,21 +25,57 @@
     import router from '@/router/router';
     import { ref, computed, watch, reactive, onMounted } from "vue";
     import { useRouter } from 'vue-router';
+    import axios from "axios";
 
-    const token = ref(localStorage.getItem('token'));
+    // const token = ref(localStorage.getItem('token'));
 
-    // 로그인 여부 계산
-    const isLoggedIn = ref(!!token.value);
+    // // 로그인 여부 계산
+    // const isLoggedIn = ref(!!token.value);
 
     const navigateTo = (path) => {
         router.push(path);
     }
 
+    const userInfo = ref(null);
+    const loaded = ref(false); 
+
+    function decodeBase64(str) {
+        const decoded = atob(str);
+        return JSON.parse(decoded);
+    }
+
+    function fetchUserInfo(token) {
+        const tokenParts = token.split('.');
+
+    if (tokenParts.length === 3) {
+        const payload = decodeBase64(tokenParts[1]);
+        axios.get(`/api/user/info/${payload.sub}`)
+        .then(response => {
+            userInfo.value = response.data;
+            console.log(userInfo.value);
+        })
+        .catch(error => {
+            console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
+        })
+        .finally(() => {
+            loaded.value = true;
+        });
+        } else {
+        console.error('잘못된 형식의 JWT 토큰입니다.');
+        }
+    }
+
     // 페이지 로드 시 초기화
     onMounted(() => {
     // 로컬 스토리지에서 토큰 값을 가져와서 로그인 여부 갱신
-        token.value = localStorage.getItem('token');
-        isLoggedIn.value = !!token.value;
+        const token = localStorage.getItem('token');
+        // isLoggedIn.value = !!token.value;
+        if (token) {
+        fetchUserInfo(token);
+
+        } else {
+        console.error('토큰이 없습니다.');
+        }
     });
 
     function login() {
@@ -67,9 +103,9 @@
 
 <style scoped>
 @font-face {
-        font-family: '감탄로드돋움체 Bold';
-        src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
-    }
+    font-family: '감탄로드돋움체 Bold';
+    src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
+}
 
 * {
     margin: 0;

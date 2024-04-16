@@ -15,7 +15,6 @@
         <p>이름: {{ userdata.name }} </p>
         <p>이메일: {{ userdata.email }} </p>
         <p>별명: {{ userdata.nickname }} </p>
-        <p>등급: {{ userdata.grade }} </p>
     </div>
 </div>
 
@@ -110,7 +109,6 @@ onMounted(async () => {
 
   try {
     const response = await axios.get(`http://localhost:8080/user/joinStudyClub/${memberId}`)
-    // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
     userinfos.value = response.data    
 
     
@@ -123,7 +121,6 @@ onMounted(async () => {
 
 try {
   const res = await axios.get(`http://localhost:8080/user/${memberId}`)
-  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
   userdata.value = res.data    
 
   
@@ -136,7 +133,6 @@ onMounted(async () => {
 
 try {
   const response = await axios.get(`http://localhost:8080/recruit-apply/user/${memberId}`)
-  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
   userrecruits.value = response.data    
   
 } catch (error) {
@@ -150,7 +146,6 @@ onMounted(async () => {
 
 try {
   const response = await axios.get(`http://localhost:8080/recruit/list/${memberId}`)
-  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
   writeReruits.value = response.data    
   
 } catch (error) {
@@ -162,7 +157,6 @@ onMounted(async () => {
 
 try {
   const response = await axios.get(`http://localhost:8080/studyLog/findWritingStudyclubLogById/${memberId}`)
-  // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
   userlogs.value = response.data    
   
 } catch (error) {
@@ -209,7 +203,6 @@ onMounted(() => {
   getImageUrl(memberId);
 });
 
-const userlists = ref([]);
 
 const showApplicationList = async (writeReruit) => {
   try {
@@ -220,21 +213,44 @@ const showApplicationList = async (writeReruit) => {
     console.error('에러 발생:', error);
   }
 };
-
+// const userlists = ref([]);
 const acceptApplication = async (application) => {
   try {
+
     const response = await axios.put(`http://localhost:8080/recruit-apply/accept/${application.id}`);
-    console.log(response.data); // 수락 결과를 콘솔에 출력하거나 필요한 작업을 수행할 수 있습니다.
+
+
+    await insertMember(application);
 
   } catch (error) {
     console.error('에러 발생:', error);
   }
 };
 
+const insertMember = async (application) => {
+  try {
+    console.log(application.id);
+    console.log(application);
+
+    const postData = { memberId: application.id, studyclubId: application.recruitPostId, someData: 'someValue' }; 
+    console.log(postData);
+    const response = await axios.post('http://localhost:8080/studyclubMember/insertMember', postData, {
+      headers: {
+        'Content-Type': 'application/json', // JSON 형식으로 데이터를 전송하기 위한 헤더 추가
+      },
+      body: JSON.stringify(postData)           
+    });
+
+    console.log('새로운 함수 응답 데이터:', response.data);
+  } catch (error) {
+    console.error('새로운 함수 에러 발생:', error);
+  }
+};
+
 const rejectApplication = async (application) => {
   try {
     const response = await axios.put(`http://localhost:8080/recruit-apply/reject/${application.id}`);
-    console.log(response.data); // 거절 결과를 콘솔에 출력하거나 필요한 작업을 수행할 수 있습니다.
+    console.log(response.data);
 
   } catch (error) {
     console.error('에러 발생:', error);

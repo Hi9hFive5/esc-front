@@ -1,4 +1,5 @@
 <script setup>
+    import router from "@/router/router";
     import { reactive, ref, onMounted } from "vue";
     import { useRoute } from 'vue-router';
     
@@ -21,7 +22,7 @@
     const fetchCategory = async() => {
 
         try {
-            const response = await fetch('http://localhost:8080/studyclub/category');
+            const response = await fetch('/api/studyclub/category');
             // 작성자 id 경로에 추후 추가
 
             if(!response.ok) {
@@ -39,7 +40,7 @@
     const fetchExams = async() => {
 
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/exam/${selectedCategory.value}`);
+            const response = await fetch(`/api/studyclub/exam/${selectedCategory.value}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -57,7 +58,7 @@
     const fetchGoals = async() => {
 
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/goal/${selectedCategory.value}`);
+            const response = await fetch(`/api/studyclub/goal/${selectedCategory.value}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -83,7 +84,7 @@
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/regist/${id}`, {
+            const response = await fetch(`/api/studyclub/regist/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,6 +96,11 @@
             if(!response) {
                 throw new Error('Network response was not ok');
             }
+            alert('스터디클럽이 생성되었습니다!');
+            alert('모집글 작성 페이지로 이동합니다.');
+
+            const data = await response.json();
+            router.push(`/recruit-regist/${data["id"]}`);
             
         } catch(error) {
             console.error('There was a problem with the fetch operation:', error.message);

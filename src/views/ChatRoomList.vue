@@ -68,10 +68,10 @@ const isTrue = ref(true);
 async function callData() {
 
     console.log("실행 전 길이 :", roomList.value.length)
-    const getUrl = `http://localhost:8080/chat/room/title/${search_condition.value}`;
+    const getUrl = `/api/chat/room/title/${search_condition.value}`;
     console.log('getURL: ', getUrl)
 
-    const response = await axios.get(`http://localhost:8080/chat/room/title/${search_condition.value}`);
+    const response = await axios.get(`/api/chat/room/title/${search_condition.value}`);
 
     roomList.value = response.data;
     console.log('roomList : ', roomList.value)

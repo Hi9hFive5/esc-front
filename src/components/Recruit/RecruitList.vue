@@ -54,7 +54,7 @@
     };
 
     function makeStudyClub() {
-        router.push(`/recruit-regist/${userInfo.value.id}`)
+        router.push(`/studyclub-regist/${userInfo.value.id}`)
     }
 
     function decodeBase64(str) {
