@@ -29,7 +29,7 @@
 
     onMounted(async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/studyLog/find/${id}`)
+      const response = await axios.get(`http://localhost:30003/studyLog/find/${id}`)
 
       logData.value = response.data 
 

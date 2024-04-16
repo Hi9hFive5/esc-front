@@ -105,11 +105,11 @@ function fetchUserInfo(token) {
 
 onMounted(async () => {
 
-    const response = await axios.get(`http://localhost:8080/chat/room/id/${roomId.params.id}`);
+    const response = await axios.get(`http://localhost:30003/chat/room/id/${roomId.params.id}`);
     const name = ref(response.data.roomName);
     roomName.value = name.value;
 
-    const socketUrl = `ws://localhost:8080/chat/${roomId.params.id}`;
+    const socketUrl = `ws://localhost:30003/chat/${roomId.params.id}`;
 
     socket.value = new WebSocket(socketUrl);
     socket.value.onopen = function (event) {

@@ -93,7 +93,7 @@ function fetchUserInfo(token) {
 
 const fetchStudySchedules = async (id) => {
     try {
-        const response = await axios.get(`http://localhost:8080/study-schedule/studyclub/${id}`);
+        const response = await axios.get(`http://localhost:30003/study-schedule/studyclub/${id}`);
         const data = response.data;
         console.log(data);
 
@@ -128,12 +128,12 @@ const fetchStudySchedules = async (id) => {
 onMounted(async () => {
 
     try {
-        const response1 = await axios.get(`http://localhost:8080/user/findJoinMemberAndName/${studyclubId}`)
+        const response1 = await axios.get(`http://localhost:30003/user/findJoinMemberAndName/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         userinfos.value = response1.data
         console.log(userinfos);
 
-        const response2 = await axios.get(`http://localhost:8080/studyLog/findStudyclubLog/${studyclubId}`)
+        const response2 = await axios.get(`http://localhost:30003/studyLog/findStudyclubLog/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         studylogs.value = response2.data
         console.log(studylogs);

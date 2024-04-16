@@ -26,7 +26,7 @@
     const fetchCategory = async() => {
 
         try {
-            const response = await fetch('http://localhost:8080/studyclub/category');
+            const response = await fetch('http://localhost:30003/studyclub/category');
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -43,7 +43,7 @@
     const fetchExams = async() => {
 
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/exam/${studyclub.selectedCategory}`);
+            const response = await fetch(`http://localhost:30003/studyclub/exam/${studyclub.selectedCategory}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -60,7 +60,7 @@
     const fetchGoals = async() => {
 
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/goal/${studyclub.selectedCategory}`);
+            const response = await fetch(`http://localhost:30003/studyclub/goal/${studyclub.selectedCategory}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -77,7 +77,7 @@
     const fetchStudyclub = async(id) => {
         
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/detail/${id}`);
+            const response = await fetch(`http://localhost:30003/studyclub/detail/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -97,7 +97,7 @@
 
     const fetchStudyGoal = async(id) => {
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/study-goal/${id}`);
+            const response = await fetch(`http://localhost:30003/studyclub/study-goal/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -113,7 +113,7 @@
 
     const fetchStudyExam = async(id) => {
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
+            const response = await fetch(`http://localhost:30003/studyclub/study-exam/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -142,7 +142,7 @@
         console.log(modifyData);
 
         try {
-            const response = await fetch(`http://localhost:8080/studyclub/modify/${id}`, {
+            const response = await fetch(`http://localhost:30003/studyclub/modify/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
