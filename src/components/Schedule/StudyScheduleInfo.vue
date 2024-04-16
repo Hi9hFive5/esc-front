@@ -19,17 +19,55 @@ const end = ref();
 const useStatus = ref();
 const studyclubId = ref();
 const writerId = ref();
-
 const participantList = ref();
 
 const isReadOnly = ref(true);
 
 const selectMember = ref('');
 
+const userInfo = ref(null);
+const loaded = ref(false);
+const modifyCheck = ref(false);
+
+function decodeBase64(str) {
+    const decoded = atob(str);
+    return JSON.parse(decoded);
+}
+
+function fetchUserInfo(token) {
+    const tokenParts = token.split('.');
+
+    if (tokenParts.length === 3) {
+        const payload = decodeBase64(tokenParts[1]);
+        axios.get(`/api/user/info/${payload.sub}`)
+            .then(response => {
+                userInfo.value = response.data;
+                console.log('작성자: ', writerId.value);
+                console.log('로그인: ', userInfo.value.id);
+                if (writerId.value == userInfo.value.id) {
+                    modifyCheck.value = true;
+                } else {
+                    modifyCheck.value = false;
+                }
+            })
+            .catch(error => {
+                console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
+            })
+            .finally(() => {
+                loaded.value = true;
+            });
+    } else {
+        console.error('잘못된 형식의 JWT 토큰입니다.');
+    }
+}
+
+
+
+
 const fetchStudySchedule = async (id) => {
 
     try {
-        const response = await axios.get(`http://localhost:8080/study-schedule/schedule/${id}`);
+        const response = await axios.get(`http://localhost:30003/study-schedule/schedule/${id}`);
         const data = response.data;
         console.log(data);
         const startDate = moment(data.start).format('YYYY-MM-DDTHH:mm');
@@ -51,12 +89,12 @@ const fetchStudySchedule = async (id) => {
 const members = ref();
 async function fetchMember() {
     try {
-        const response = await axios.get(`http://localhost:8080/user/findJoinMemberAndName/${studyclubId.value}`);
+        const response = await axios.get(`http://localhost:30003/user/findJoinMemberAndName/${studyclubId.value}`);
         const data = response.data;
 
         members.value = data;
         console.log('패치');
-        console.log(members.value); 
+        console.log(members.value);
     } catch (error) {
         console.error('이벤트 데이터를 불러오는 중 오류 발생:', error);
     }
@@ -76,13 +114,23 @@ onMounted(async () => {
     console.log(participantList.value);
     console.log(members.value);
 
-    for(const member of members.value){
-        if(participantList.value.includes(member.id)){
+    for (const member of members.value) {
+        if (participantList.value.includes(member.id)) {
             selectedMembers.value.push(member);
-        }else{
+        } else {
             unselectedMembers.value.push(member);
         }
     }
+
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        fetchUserInfo(token);
+
+    } else {
+        console.error('토큰이 없습니다.');
+    }
+    console.log('유저 정보: ', userInfo.value);
 })
 
 async function saveStudySchedule() {
@@ -104,12 +152,12 @@ async function saveStudySchedule() {
         start: startDate,
         end: endDate,
         useStatus: useStatus.value,
-        participantList: participantList.value,
+        participantList: select,
     };
     console.log(sendData);
 
     await axios.put(
-        `http://localhost:8080/study-schedule/modify`,
+        `http://localhost:30003/study-schedule/modify`,
         sendData
     );
 
@@ -119,7 +167,7 @@ async function saveStudySchedule() {
 async function removeStudySchedule() {
 
     await axios.put(
-        `http://localhost:8080/study-schedule/remove/${id}`,
+        `http://localhost:30003/study-schedule/remove/${id}`,
     );
 
     router.push(`/study-schedule/${studyclubId.value}`);
@@ -170,34 +218,42 @@ async function removeParticipant(id) {
                         <input v-if="!isReadOnly" type="datetime-local" class="content" v-model="end">
                         <span v-else>{{ end }}</span>
                     </div>
-                    <div class="member">참여 멤버:
+                    <div class="member">
                         <div v-if="!isReadOnly">
-                        <select class="content" v-model="selectMember"
-                            @change="addParticipant(selectMember.id)">
-                            <option disabled value="">선택해주세요</option>
-                            <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
-                        </select>
-                        <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
-                            <div>{{ item.name }}</div>
-                            <button @click="removeParticipant(item.id)">삭제</button>
+                            참여 멤버:
+                            <select class="content" v-model="selectMember" @change="addParticipant(selectMember.id)">
+                                <option disabled value="">선택해주세요</option>
+                                <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
+                            </select>
+                            <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
+                                <div>{{ item.name }}</div>
+                                <button @click="removeParticipant(item.id)">x</button>
+                            </div>
                         </div>
-                        </div>
-                        <div v-else class="selectedMember" v-for="item in selectedMembers" :value="item.id">
-                            <div>{{ item.name }}</div>
+                        <div v-else class="selectedMember">
+                            참여 멤버:
+                            <div class="member-info">
+                                <div v-for="item in selectedMembers" :value="item.id">
+                                    <div>{{ item.name }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="submit">
+                        <div v-if="modifyCheck">
                         <button v-if="!isReadOnly" @click="saveStudySchedule()">저장하기</button>
                         <button v-if="!isReadOnly" @click="removeStudySchedule()">삭제하기</button>
                         <button v-else @click="isReadOnly = false">수정하기</button>
                     </div>
+                    <div v-else> </div>
+                    </div>
                 </div>
             </div>
         </div>
-           
-    <Footer></Footer>
+
+        <Footer></Footer>
     </div>
-    
+
 
 </template>
 
@@ -234,20 +290,23 @@ async function removeParticipant(id) {
     justify-content: center;
     padding: 20px;
 }
-.selectedMember{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+
+.selectedMember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
 .wrapper {
-    margin-left:12.5%;
-    margin-right:12.5%;
-    width:75%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+    width: 75%;
     display: grid;
 }
+
 .all {
-        display: grid;
-        grid-template-rows: 100px minmax(780px, auto) 200px;
-        align-items: center;
-    }
+    display: grid;
+    grid-template-rows: 100px minmax(780px, auto) 200px;
+    align-items: center;
+}
 </style>
