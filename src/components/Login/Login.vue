@@ -2,14 +2,14 @@
     <div>
         <div class="login">
             <div class="title">
-                <h1>English Study Club</h1>
+                <h2>English Study Club</h2>
             </div>
             <div class="idTitle">
-                <h2>아이디</h2>
+                <h5>아이디</h5>
                 <input type="text" class="idBox" placeholder="아이디를 입력하세요" v-model.trim="email">
             </div>
             <div class="pwdTitle">
-                <h2>비밀번호</h2>
+                <h5>비밀번호</h5>
                 <input type="password" class="pwdBox" placeholder="비밀번호를 입력하세요" v-model.trim="password">
             </div>
             <div class="bottomtext">
@@ -168,5 +168,6 @@ function resetPwd() {
 
 .bottomtext {
     margin-top:1%;
+    font-size:15px;
 }
 </style>

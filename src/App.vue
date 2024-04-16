@@ -4,15 +4,25 @@
     import { RouterLink, RouterView, useRouter } from 'vue-router';
 
     const router = useRouter();
+    
+    // function openChat() {
+    //     const uniqueName = `chat_${new Date().getTime()}`;
+        
+    //     window.open(`http://localhost:5173/chat/list`, uniqueName, "width=700, height=700")
+    // }
+
 </script>
 
 <template>
+
     <div class="all">
         <Header></Header>
+
 
         <main class="wrapper">
             <RouterView />
         </main>
+
 
         <Footer></Footer> 
     </div>

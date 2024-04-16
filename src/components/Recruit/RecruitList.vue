@@ -2,8 +2,11 @@
     import { reactive, ref, onMounted } from 'vue';
     import RecruitCard from './RecruitCard.vue';
     import { useRouter } from 'vue-router';
+    import axios from "axios";
 
     const router = useRouter();
+    const userInfo = ref(null);
+    const loaded = ref(false); 
 
     const navigateTo = (path) => {
         router.push(path);
@@ -19,7 +22,7 @@
     const fetchRecruitList = async() => {
 
         try {
-            const response = await fetch("http://localhost:8080/recruit/list");
+            const response = await fetch("/api/recruit/list");
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -36,7 +39,7 @@
     const fetchCategory = async() => {
 
         try {
-            const response = await fetch('http://localhost:8080/studyclub/category');
+            const response = await fetch('/api/studyclub/category');
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -50,9 +53,47 @@
         }
     };
 
+    function makeStudyClub() {
+        router.push(`/recruit-regist/${userInfo.value.id}`)
+    }
+
+    function decodeBase64(str) {
+        const decoded = atob(str);
+        return JSON.parse(decoded);
+    }
+
+    function fetchUserInfo(token) {
+        const tokenParts = token.split('.');
+
+    if (tokenParts.length === 3) {
+        const payload = decodeBase64(tokenParts[1]);
+        axios.get(`/api/user/info/${payload.sub}`)
+        .then(response => {
+            userInfo.value = response.data;
+            console.log(userInfo.value);
+        })
+        .catch(error => {
+            console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
+        })
+        .finally(() => {
+            loaded.value = true;
+        });
+        } else {
+        console.error('잘못된 형식의 JWT 토큰입니다.');
+        }
+    }
+
     onMounted(async() => {
         await fetchRecruitList();
         await fetchCategory();
+
+        const token = localStorage.getItem('token');
+
+        if (token) {
+        fetchUserInfo(token);
+        } else {
+        console.error('토큰이 없습니다.');
+        }
     });
 
 </script>
@@ -70,7 +111,7 @@
         <select class="category" v-model="selectedCategory">
             <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
         </select>
-        <div class="fixed" @click="navigateTo('/recruit-regist/1')">모집글?스터디클럽 등록하기?</div>
+        <div class="fixed" @click="makeStudyClub()">스터디클럽 생성하기</div>
     </div>
     <div>
         <RecruitCard class="card" v-for="recruit in state.recruitList" :key="recruit.id" :recruit="recruit"></RecruitCard>
