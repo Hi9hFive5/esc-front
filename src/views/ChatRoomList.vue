@@ -95,12 +95,12 @@ function resetList() {
 
 async function createNewRoom() {
 
-    const final = await axios.get(`http://localhost:8080/chat/room/last`);
+    const final = await axios.get(`http://localhost:30003/chat/room/last`);
     console.log(final.data);
     const newRoomId = final.data + 1;
     console.log('newRoomId', newRoomId);
 
-    await axios.post(`http://localhost:8080/chat/room`, {
+    await axios.post(`http://localhost:30003/chat/room`, {
         id: newRoomId,
         roomName: newRoomName.value,
         roomHostId: 1
@@ -128,6 +128,10 @@ section {
         "   main    ";
     padding: 0;
     margin: 0;
+    margin-left:10%;
+    margin-right:10%;
+    width:80%;
+
 }
 
 .chatWrapper {

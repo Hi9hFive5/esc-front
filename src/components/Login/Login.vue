@@ -58,7 +58,7 @@ const tokenData = async () => {
             // localStorage.setItem('email', email.value)
             
         
-            router.push('/after/login'); 
+            router.push('/'); 
         }
     }).catch ((e) => {
         console.log('로그인 실패');
@@ -75,9 +75,6 @@ function inputCheck() {
         return false;
     } else {
         // 서버 연동하여 토큰값 가져온 후 유효성 검사 코드 추가
-        console.log('입력 정보 확인 완료');
-        console.log(email.value);
-        console.log(password.value);
         return tokenData();
     }
 }

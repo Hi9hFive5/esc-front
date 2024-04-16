@@ -129,7 +129,7 @@
 
   const fetchUserInfo = async() => {
     try {
-      const response = await fetch(`http://localhost:8080/user/${id}`);
+      const response = await fetch(`http://localhost:30003/user/${id}`);
 
       if(!response.ok) {
           throw new Error('response is not ok');
@@ -145,7 +145,7 @@
 
   const fetchUserStudyclub = async() => {
     try {
-      const response = await fetch(`http://localhost:8080/user/joinStudyClub/${id}`);
+      const response = await fetch(`http://localhost:30003/user/joinStudyClub/${id}`);
 
       if(!response.ok) {
           throw new Error('response is not ok');
@@ -161,7 +161,7 @@
 
   const fetchUserApplication = async() => {
     try {
-      const response = await fetch(`http://localhost:8080/recruit-apply/user/${id}`);
+      const response = await fetch(`http://localhost:30003/recruit-apply/user/${id}`);
 
       if(!response.ok) {
           throw new Error('response is not ok');
@@ -177,7 +177,7 @@
 
   const fetchUserLog = async() => {
     try {
-      const response = await fetch(`http://localhost:8080/studyLog/findWritingStudyclubLogById/${id}`);
+      const response = await fetch(`http://localhost:30003/studyLog/findWritingStudyclubLogById/${id}`);
 
       if(!response.ok) {
           throw new Error('response is not ok');
@@ -195,7 +195,7 @@
   
   const fetchUserRecruit = async() => {
     try {
-      const response = await fetch(`http://localhost:8080/recruit/list/${id}`);
+      const response = await fetch(`http://localhost:30003/recruit/list/${id}`);
 
       if(!response.ok) {
           throw new Error('response is not ok');

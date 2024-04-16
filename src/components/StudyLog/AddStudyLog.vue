@@ -33,7 +33,7 @@ if (router.currentRoute.value.params.schedule) {
 
 async function createLog() {
   try {
-    await axios.post(`http://localhost:8080/studyLog/insert`, {
+    await axios.post(`http://localhost:30003/studyLog/insert`, {
       studyclubId: studyclubId,
       content: logContent.value,
       // 스터디 일정 정보도 함께 전달

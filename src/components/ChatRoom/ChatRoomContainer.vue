@@ -10,7 +10,7 @@
     import ChatRoomCard from "./ChatRoomCard.vue";
     const roomList = inject('roomList');
     onMounted(async () => {
-        const response = await axios.get(`http://localhost:8080/chat/room`);
+        const response = await axios.get(`http://localhost:30003/chat/room`);
         roomList.value = response.data;
     });
 </script>

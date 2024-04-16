@@ -1,5 +1,5 @@
 <script setup>
-    import { reactive, ref, onMounted } from 'vue';
+    import { reactive, ref, onMounted, isReactive } from 'vue';
     import RecruitCard from './RecruitCard.vue';
     import { useRouter } from 'vue-router';
     import axios from "axios";
@@ -57,7 +57,13 @@
     };
 
     function makeStudyClub() {
-        router.push(`/studyclub-regist/${userInfo.value.id}`)
+        if( loginCheck == true) {
+            router.push(`/studyclub-regist/${userInfo.value.id}`)
+        } else {
+            alert('로그인이 필요합니다.')
+            return false;
+        }
+        
     }
 
     function decodeBase64(str) {
@@ -73,7 +79,6 @@
         axios.get(`/api/user/info/${payload.sub}`)
         .then(response => {
             userInfo.value = response.data;
-            console.log(userInfo.value);
         })
         .catch(error => {
             console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
@@ -118,7 +123,7 @@
             <select class="category" v-model="selectedCategory">
                 <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
             </select>
-            <div class="fixed" v-if="loginCheck" @click="makeStudyClub()">스터디클럽 생성하기</div>
+            <div class="fixed" @click="makeStudyClub()">스터디클럽 생성하기</div>
         </div>
         <div>
             <RecruitCard class="card" v-for="recruit in state.recruitList" :key="recruit.id" :recruit="recruit"></RecruitCard>
