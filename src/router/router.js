@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
+import StudyScheduleSave from '@/components/Schedule/StudyScheduleSave.vue'
 
 const router = createRouter({
-
     history: createWebHistory(),
     routes: [
         {
@@ -28,7 +28,7 @@ const router = createRouter({
             path: '/recruit/:id',
             component: () => import('@/components/Recruit/RecruitDetail.vue')
         },
-        {
+        { // id에 해당하는 스터디 클럽
             path: '/studyclub/:id',
             component: () => import('@/views/StudyclubView.vue')
         },
@@ -57,9 +57,8 @@ const router = createRouter({
             component: () => import('@/views/ChatRoomList.vue')
         },
         {
-
             path: '/member-schedule/:studyclubId/:memberId',
-            component: () => import('@/components/Schedule/MemberSchedule.vue')
+            component: () => import('@/components/Schedule/MemberScheduleView.vue')
         },
         {
             path: '/findId',
@@ -70,12 +69,25 @@ const router = createRouter({
             component: () => import('../views/FindIdResultPage.vue')
         },
         {
-            path: '/resetPassword',
-            component: () => import('../views/ResetPwdPage.vue')
+            path: '/study-schedule/:studyclubId',
+            component: () => import('@/components/Schedule/StudyScheduleView.vue')
+        },
+        {
+            path: '/study-schedule/save/:studyclubId/:memberId/:start/:end',
+            name: 'StudyScheduleSave',
+            component: StudyScheduleSave,
+        },
+        {
+            path: '/study-schedule/schedule/:id',
+            component: () => import('@/components/Schedule/StudyScheduleInfo.vue')
         },
         {
             path: '/resetPasswordFinal/:email',
             component: () => import('../views/ResetPwdFinalPage.vue')
+        },
+        {
+            path: '/resetPassword',
+            component: () => import('../views/ResetPwdPage.vue')
         },
         {
             path: '/mypage/:id',
@@ -92,7 +104,6 @@ const router = createRouter({
         {
             path: '/studylog/:id',
             component: () => import('@/components/StudyLog/StudyLogPage.vue')
-
         }
     ]
 })
