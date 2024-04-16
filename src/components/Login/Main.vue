@@ -24,7 +24,7 @@
                 
             </div>
             <div class="together">
-                <img src="@/assets/together.png" style="padding-top: 30px; margin-left: -30px">
+                <img src="@/assets/together.png" style="padding-top: 20px; margin-left: -30px">
                 <div class="button3" @click="navigateTo('/recruit-list')">모집글 목록 보러가기</div> 
             </div>
         </div>
@@ -56,6 +56,7 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
+        margin-bottom: 20px;
     }
     .title-area2 {
         text-align: right;
@@ -146,6 +147,7 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
+        margin-bottom: 70px;
     }
     .together {
         display: flex;

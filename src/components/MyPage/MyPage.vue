@@ -6,10 +6,10 @@
         <img :src="imageUrl" alt="Uploaded Image">
         </div>
       </form>
-        <div>
+        <!-- <div>
           <input type="file" @change="handleFileChange">
           <button @click ="uploadImage">Upload</button>
-         </div>
+        </div> -->
     </div> 
     <div class="userInfo">
         <p>이름: {{ userdata.name }} </p>
