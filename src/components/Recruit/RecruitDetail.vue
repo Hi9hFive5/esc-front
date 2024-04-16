@@ -86,7 +86,7 @@
 
     const fetchCategory = async(id) => {
         try {
-            const response = await fetch(`/api/studyclub/category/${id}`);
+            const response = await fetch(`/api/studyclub/study-category/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
