@@ -1,22 +1,27 @@
 <template>
-<div class="container">
-    <div class="userImage">
-      <form  enctype="multipart/form-data">
-        <div>
-        <img :src="imageUrl" alt="Uploaded Image">
+  <div class="all"> 
+    <Header></Header>
+  <div class="wrapper">
+    <div class="container">
+        <div class="userImage">
+          <form  enctype="multipart/form-data">
+            <div>
+            <img :src="imageUrl" alt="Uploaded Image">
+            </div>
+          </form>
+            <div>
+              <input type="file" @change="handleFileChange">
+              <button @click ="uploadImage">Upload</button>
+            </div>
+        </div> 
+        <div class="userInfo">
+            <p>이름: {{ userdata.name }} </p>
+            <p>이메일: {{ userdata.email }} </p>
+            <p>별명: {{ userdata.nickname }} </p>
         </div>
-      </form>
-        <div>
-          <input type="file" @change="handleFileChange">
-          <button @click ="uploadImage">Upload</button>
-         </div>
-    </div> 
-    <div class="userInfo">
-        <p>이름: {{ userdata.name }} </p>
-        <p>이메일: {{ userdata.email }} </p>
-        <p>별명: {{ userdata.nickname }} </p>
     </div>
-</div>
+
+
 
 <div class="container">
     
@@ -87,12 +92,18 @@
   </div>
 </div>
 </div>
+</div>
+<Footer></Footer>
+  </div>
+  
 </template>
 
 <script setup>
   import axios from 'axios';
   import { useRouter,RouterLink } from 'vue-router';
   import { ref, onMounted } from 'vue';
+  import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
 
   const userinfos = ref([]);
   const userdata = ref([]);
@@ -265,6 +276,13 @@ const rejectApplication = async (application) => {
     justify-content: center;
 }
 
+.wrapper {
+    margin-left:12.5%;
+    margin-right:12.5%;
+    width:75%;
+    display: grid;
+}
+
 .smallPage {
     background-color: white;
     width: 180px;
@@ -319,5 +337,11 @@ const rejectApplication = async (application) => {
 .modal-body {
 
 }
+
+.all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
 
 </style>

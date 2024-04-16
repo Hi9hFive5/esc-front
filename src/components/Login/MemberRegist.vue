@@ -230,7 +230,7 @@ function pwdCondition(password) {
 }
 
 .pwdBox {
-    width: 98%;
+    width: 100%;
     height: 30px;
 }
 
@@ -240,7 +240,7 @@ function pwdCondition(password) {
 }
 
 .nameBox {
-    width: 98%;
+    width: 100%;
     height: 30px; 
 }
 
@@ -292,22 +292,22 @@ function pwdCondition(password) {
 }
 
 .pwdConfirmBox {
-    width: 98%;
+    width: 100%;
     height: 30px;
 }
 
 .emailBox {
-    width: 98%;
+    width: 100%;
     height: 30px;
 }
 
 .certificationBox {
-    width: 98%;
+    width: 100%;
     height: 30px;
 }
 
 .nicknameBox {
-    width: 98%;
+    width: 100%;
     height: 30px;
 }
 

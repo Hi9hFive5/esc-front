@@ -3,6 +3,8 @@
     import { useRoute } from 'vue-router';
     import axios from "axios";
     import router from '@/router/router';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
 
     const userInfo = ref(null);
     const loaded = ref(false); 
@@ -179,40 +181,46 @@
 </script>
 
 <template>
-    <div class="post-header">
-        <div class="title-area">
-            <div class="title">{{ state.recruit["title"] }}</div>
-            <div class="createdDate">작성일:&nbsp; {{ state.recruit["createdDate"] }}</div>
-        </div>
-        <div class="writer-area">
-            <div class="writer">{{ state.writer["nickname"] }}</div>
-            <div class="chat" v-if="modifyCheck" @click="modifyPage()"><button class="modifybtn">수정하기</button></div>
-        </div>
-    </div>
-    <hr>
-    <div>
-        <div class="section">
-            <div class="section-title">🌟 스터디클럽 이름</div>
-            <div class="section-content">{{ state.studyclub["name"] }}</div> 
-        </div>
-        <div class="section">
-            <div class="section-title">🌈 스터디클럽 소개</div>
-            <div class="section-content">{{ state.studyclub["introduce"] }}</div>
-        </div>
-        <div class="section">
-            <div class="section-title">✅ 모집 내용</div>
-            <div class="section-subtitle">모집 인원: {{ state.studyclub["memberLimit"] }}명 </div>
-            <div class="section-subtitle" style="margin-bottom: 20px;">카테고리: {{ state.category["studyName"] }}</div>
-            <div class="section-content">{{ state.recruit["content"] }}</div> 
-        </div>
-        <div class="section">
-            <div class="section-title">📅 진행 기간</div>
-            <div class="section-content">~ {{ state.exam["examDate"] }}까지</div> 
+    <div class="all">
+    <Header></Header>
+    <div class="wrapper">
+        <div class="post-header">
+            <div class="title-area">
+                <div class="title">{{ state.recruit["title"] }}</div>
+                <div class="createdDate">작성일:&nbsp; {{ state.recruit["createdDate"] }}</div>
+            </div>
+            <div class="writer-area">
+                <div class="writer">{{ state.writer["nickname"] }}</div>
+                <div class="chat" v-if="modifyCheck" @click="modifyPage()"><button class="modifybtn">수정하기</button></div>
+            </div>
         </div>
         <hr>
-        <div class="submit">
-            <button class="applybtn" @click="applyRecruit(userId, id)">신청하기</button>
+        <div>
+            <div class="section">
+                <div class="section-title">🌟 스터디클럽 이름</div>
+                <div class="section-content">{{ state.studyclub["name"] }}</div> 
+            </div>
+            <div class="section">
+                <div class="section-title">🌈 스터디클럽 소개</div>
+                <div class="section-content">{{ state.studyclub["introduce"] }}</div>
+            </div>
+            <div class="section">
+                <div class="section-title">✅ 모집 내용</div>
+                <div class="section-subtitle">모집 인원: {{ state.studyclub["memberLimit"] }}명 </div>
+                <div class="section-subtitle" style="margin-bottom: 20px;">카테고리: {{ state.category["studyName"] }}</div>
+                <div class="section-content">{{ state.recruit["content"] }}</div> 
+            </div>
+            <div class="section">
+                <div class="section-title">📅 진행 기간</div>
+                <div class="section-content">~ {{ state.exam["examDate"] }}까지</div> 
+            </div>
+            <hr>
+            <div class="submit">
+                <button class="applybtn" @click="applyRecruit(userId, id)">신청하기</button>
+            </div>
         </div>
+    </div>
+    <Footer></Footer>
     </div>
 </template>
 
@@ -221,6 +229,19 @@
         font-family: '감탄로드돋움체 Bold';
         src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
     }
+    
+    .wrapper {
+        margin-left:12.5%;
+        margin-right:12.5%;
+        width:75%;
+        display: grid;
+    }
+    .all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
+
     .post-header {
         display: flex;
         justify-content: space-between;
