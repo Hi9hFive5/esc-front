@@ -101,7 +101,7 @@
 </script>
 
 <template>
-    <div>스터디그룹 페이지</div>
+    <div style="margin: 20px;">스터디그룹 페이지</div>
     <div class="hello">👋 <{{ state.studyclub["name"] }}>에 오신 것을 환영합니다!</div>
     <div class="info">
         <div class="d-day"> {{ state.category["studyName"] }} 시험일: {{ state.exam["examDate"]}}  (D - {{ state.studyclub["diff"] }})</div>

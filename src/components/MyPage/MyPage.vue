@@ -1,74 +1,105 @@
 <template>
-<div>
-  <div>{{ state.userInfo["nickname"] }}님의 마이페이지</div>
-  <div class="profile">
-    <img src="@/assets/profile.png" alt="">
-  </div>
-  <div class="user-info">
-    <div></div>
-    <div></div>
-  </div>
-</div>
-
-<div class="container">
-    <div class="box">
-        <p class="box-title">참여 중인 스터디</p>
-        <div class="box-content">
-          <UserProps v-for="studyclub in state.userStudyclubs" :value="studyclub.name" :studyclub="studyclub"></UserProps>
+  <div class="all">
+    <Header></Header>
+    <div class="wrapper">
+      <div>
+        <div style="margin: 20px; margin-bottom: 40px;">{{ state.userInfo["nickname"] }}님의 마이페이지</div>
+        <div class="profile">
+          <img src="@/assets/profile.png">
         </div>
-    </div>
-    <div class="box">
-        <p class="box-title">작성한 로그</p>
-        <div class="box-content">
-          <UserProps v-for="log in state.userLogs" :value="log" :log="log"></UserProps>
+        <div class="user-info">
+          <div class="nickname">{{ state.userInfo["nickname"] }}</div>
+          <div>포인트: {{ state.userInfo["point"] }}</div>
+          <div>레벨: {{ state.userInfo["grade"] }}</div>
         </div>
-    </div>
-    <div class="box">
-        <p class="box-title">참여 신청한 모집글</p>
-        <div class="box-content">
-          <UserProps v-for="application in state.userApplications" :value="application.id" :application="application"></UserProps>
-        </div>
-    </div>
-    <!-- <div class="bigPage">
-        <p>작성한 모집글</p>
-        <div class="smallPage">
-          <UserProps v-for="recruit in state.userRecruits" :value="recruit" :recruit="recruit"></UserProps>
-          <div v-for="writeReruit in writeReruits" :key="writeReruit.id">
-                <p> {{ writeReruit.title }}
-                  <button type="button" class="btn btn-primary" id="newBtn" data-bs-toggle="modal" @click="showApplicationList(writeReruit)"
-                    data-bs-target="#myModal">
-                    신청 목록
-                </button>
-              </p>
-
-              </div>
-        </div>
-    </div> -->
-<!-- <div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h4 class="modal-title">신청한 회원 목록</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body">
-          <div v-for="selectedRecruitApplication in selectedRecruitApplications" :key="selectedRecruitApplication.id">
-            <p> {{ selectedRecruitApplication.name }} </p>
-              <button @click="acceptApplication(selectedRecruitApplication)">수락</button>
-              <button @click="rejectApplication(selectedRecruitApplication)">거절</button>
+      <div class="container">
+          <div class="box">
+              <p class="box-title">참여 중인 스터디</p>
+              <div class="box-content">
+                <UserProps v-for="studyclub in state.userStudyclubs" :value="studyclub.name" :studyclub="studyclub"></UserProps>
+              </div>
+          </div>
+          <div class="box">
+              <p class="box-title">작성한 로그</p>
+              <div class="box-content">
+                <UserProps v-for="log in state.userLogs" :value="log" :log="log"></UserProps>
+              </div>
+          </div>
+          <div class="box">
+              <p class="box-title">참여 신청한 모집글</p>
+              <div class="box-content">
+                <UserProps v-for="application in state.userApplications" :value="application.id" :application="application"></UserProps>
+              </div>
+          </div>
+          <!-- <div class="bigPage">
+              <p>작성한 모집글</p>
+              <div class="smallPage">
+                <UserProps v-for="recruit in state.userRecruits" :value="recruit" :recruit="recruit"></UserProps>
+                <div v-for="writeReruit in writeReruits" :key="writeReruit.id">
+                      <p> {{ writeReruit.title }}
+                        <button type="button" class="btn btn-primary" id="newBtn" data-bs-toggle="modal" @click="showApplicationList(writeReruit)"
+                          data-bs-target="#myModal">
+                          신청 목록
+                      </button>
+                    </p>
+
+                    </div>
+              </div>
+          </div> -->
+      <!-- <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h4 class="modal-title">신청한 회원 목록</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div v-for="selectedRecruitApplication in selectedRecruitApplications" :key="selectedRecruitApplication.id">
+                  <p> {{ selectedRecruitApplication.name }} </p>
+                    <button @click="acceptApplication(selectedRecruitApplication)">수락</button>
+                    <button @click="rejectApplication(selectedRecruitApplication)">거절</button>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div> -->
+      </div>
+        <div>
+          <div class="box" style="height: fit-content;">
+              <p class="box-title">작성한 모집글</p>
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item" v-for="recruit in state.userRecruits" :value="recruit" :key="recruit.id" :recruit="recruit">
+                  <h2 class="accordion-header">
+                    <button @click="fetchApplicationList(recruit.id)" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#flush-collaps${recruit.id}`" aria-expanded="false" :aria-controls="`#flush-collapse${recruit.id}`">
+                      {{ recruit.title }}
+                    </button>
+                  </h2>
+                  <div :id="`flush-collaps${recruit.id}`" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body" v-for="apply in state.recruitApplications" >
+                      <div class="apply-name">{{ apply.name }}</div>
+                      <div class="apply-buttons">
+                        <div>수락</div>
+                        <div>거절</div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
           </div>
       </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-      </div>
-
     </div>
+    <Footer></Footer>
   </div>
-</div> -->
-</div>
+
 <!-- 3개
     모집글 펼치면 신청 목록
     수정하기 버튼 추가  -->
@@ -78,6 +109,8 @@
   import { useRoute, useRouter,RouterLink } from 'vue-router';
   import { reactive, ref, onMounted } from 'vue';
   import UserProps from '@/components/MyPage/UserProps.vue';
+  import Header from "@/components/Header/Header.vue";
+  import Footer from "@/components/Footer/Footer.vue";
 
   const route = useRoute();
   const id = route.params.id;
@@ -88,7 +121,8 @@
     userStudyclubs: {},
     userApplications: {},
     userLogs: {},
-    userRecruits: {}
+    userRecruits: {},
+    recruitApplications: {}
   });
 
   const selectedRecruitApplications = ref([]);
@@ -169,6 +203,22 @@
 
       const data = await response.json();
       state.userRecruits = data;
+
+    } catch(error) {
+        console.error('fetch error: ' + error.message);
+    }
+  }
+
+  const fetchApplicationList = async(recruitId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/recruit-apply/post/${recruitId}`);
+
+      if(!response.ok) {
+          throw new Error('response is not ok');
+      }
+
+      const data = await response.json();
+      state.recruitApplications = data;
 
     } catch(error) {
         console.error('fetch error: ' + error.message);
@@ -282,6 +332,7 @@
 .container {
   display: flex;
   justify-content: space-between;
+  margin-top: 20px;
 }
 .profile {
   display: flex;
@@ -293,20 +344,24 @@
     width:75%;
     display: grid;
 }
+.all {
+    display: grid;
+    grid-template-rows: 100px minmax(780px, auto) 200px;
+    align-items: center;
+}
 
-.smallPage {
+/* .smallPage {
     background-color: white;
     width: 180px;
     height: 210px;
     padding: 20px;
     color: black;
     overflow-y: auto;
-    font-size: 15px;
+    font-size: 15px; */
 
-}
+/* } */
 .profile img {
-  margin-top: 20px;
-  padding: 30px;
+  margin: 20px 0px;
   height: 200px;
   width: 200px;
 }
@@ -327,11 +382,23 @@
   margin-top: 40px;
   padding: 0px, 20px;
 }
-#newBtn {
-  font-size: 7px; /* 폰트 크기 조정 */
-  padding: 3px 6px; /* 내부 여백 조정 */
+.nickname {
+  font-size: 30px;
+  margin: 20px;
 }
-.userImage {
+.user-info {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.accodian-body {
+  display: flex;
+  justify-content: space-between;
+}
+.apply-name {
+  flex: 1;
+}
+/* .userImage {
     background-color: #ddd;
     width: 120px;
     height: 150px;
@@ -353,5 +420,5 @@
     font-family: '감탄로드돋움체 Bold';
     src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
     border: 1px solid black;
-}
+} */
 </style>
