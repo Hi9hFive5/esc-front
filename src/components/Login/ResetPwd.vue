@@ -5,18 +5,18 @@
                 <h1>English Study Club</h1>
             </div>
             <div class="nameTitle">
-                <h2>이름</h2>
+                <h5>이름</h5>
                 <input type="text" class="nameBox" placeholder="이름을 입력하세요" v-model.trim="memberName">
             </div>
             <div class="emailTitle">
-                <h2>이메일</h2>
+                <h5>이메일</h5>
                 <div class="confirmdiv">
                     <input type="text" id="emailBox" class="emailBox" placeholder="이메일을 입력하세요" v-model.trim="memberEmail">
                     <button class="confirm" :disabled="!memberEmail.trim()" @click="emailExCheck()">확인</button>
                 </div> 
             </div>
             <div class="certificationTitle">
-                <h2>인증번호</h2>
+                <h5>인증번호</h5>
                 <div class="confirmdiv">
                     <input type="text" id="certificationBox" class="certificationBox" placeholder="인증번호를 입력하세요" v-model.trim="certification">
                     <button class="trans" id="transBox" @click="emailSend()" disabled>전송</button>

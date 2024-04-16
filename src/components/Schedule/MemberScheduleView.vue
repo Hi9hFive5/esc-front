@@ -1,7 +1,9 @@
 <template>
+    <Header></Header>
     <div id="app">
         <div id="calendar"></div>
     </div>
+    <Footer></Footer>
 </template>
 
 <script setup>
@@ -9,29 +11,26 @@
     import interactionPlugin from '@fullcalendar/interaction';
     import timeGridPlugin from '@fullcalendar/timegrid';
     import moment from 'moment';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
 
     import axios from 'axios'
     import { onMounted, ref } from 'vue'
 
-    import { useRoute } from 'vue-router';
+    import { useRoute, useRouter } from "vue-router";
 
-    // 라우터 id
     const route = useRoute();
+    const router = useRouter();
     const memberId = route.params.memberId;
     const studyclubId = route.params.studyclubId;
 
     // 생성된 이벤트들 저장
     const events = ref([]);
 
-    //컬러지정
-    const color = ['#FF5733', '#337DFF', '#33FF57', '#FFFF33', '#A033FF', '#FFA933']
-    let member = [];
-
-    const calendarRef = ref(null);
     let calendar = null;
 
-    // 캘린더를 초기화하고 렌더링하는 함수
-    function initCalendar(events) {
+    // 내 캘린더를 초기화하고 렌더링하는 함수
+    function initMyCalendar(events) {
         if (calendar) {
             calendar.destroy(); // 기존 캘린더 객체 파괴
         }
@@ -43,6 +42,8 @@
             firstDay: 1,    // 월요일 시작
             contentHeight: 'auto',   // 캘린더 높이설정, 스크롤바x 
             allDaySlot: false,       // allday 안보이게
+            slotMinTime: '06:00:00',        // 캘린더 시간 설정
+            slotMaxTime: '24:00:00',
             titleFormat: function (info) {  // tile 설정
                 let year = info.date.year;
                 let month = info.date.month + 1;
@@ -108,7 +109,7 @@
             eventClick: function(info) {
 
                 // 일정 삭제 가능
-                handleEventClick(info, calendar);
+                handleMyEventClick(info, calendar);
             },
             eventDrop: function(info) {
 
@@ -123,10 +124,95 @@
         calendar.render(); // 새로운 캘린더 렌더링
     }   
 
+    // 겹쳐지는 시간 캘린더를 초기화하고 렌더링하는 함수
+    function initAllCalendar(events) {
+        if (calendar) {
+            calendar.destroy(); // 기존 캘린더 객체 파괴
+        }
+
+        const calendarEl = document.getElementById('calendar');
+        calendar = new Calendar(calendarEl, {
+            plugins: [ timeGridPlugin, interactionPlugin ],
+            initialView: 'timeGridWeek',
+            firstDay: 1,    // 월요일 시작
+            contentHeight: 'auto',   // 캘린더 높이설정, 스크롤바x 
+            allDaySlot: false,       // allday 안보이게
+            slotMinTime: '06:00:00',        // 캘린더 시간 설정
+            slotMaxTime: '24:00:00',
+            titleFormat: function (info) {  // tile 설정
+                let year = info.date.year;
+                let month = info.date.month + 1;
+
+                return year + "년 " + month + "월";
+            },
+            locale: 'ko', //한국어 설정
+            customButtons: { // 버튼별 기능
+                customPrevY: {
+                    icon: 'fc-icon-chevrons-left',
+                    click: function() {
+                    calendar.prevYear();
+                    }
+                },
+                customPrev: {
+                    icon: 'fc-icon-chevron-left',
+                    click: function() {
+                    calendar.prev();
+                    }
+                },
+                customToday: {
+                    text: 'Today',
+                    click: function() {
+                    calendar.today();
+                    }
+                },
+                customNext: {
+                    icon: 'fc-icon-chevron-right',
+                    click: function() {
+                    calendar.next();
+                    }
+                },
+                customNextY: {
+                    icon: 'fc-icon-chevrons-right',
+                    click: function() {
+                    calendar.nextYear();
+                    }
+                },
+                customAll: {
+                    text: 'All',
+                    click: function() {
+                        allFetchEvents();
+                    }
+                },
+                customMy: {
+                    text: 'My',
+                    click: function() {
+                        fetchEvents();
+                    }
+                }
+            },
+            headerToolbar: {
+                left: 'customPrevY,customPrev,customToday,customNext,customNextY',
+                center: 'title',
+                right: 'customAll,customMy'
+            },
+            events: events.value,
+            eventClick: function(info) {
+                console.log('클릭시');
+                console.log(info.event.studyclubId);
+                console.log(info.event.start);
+                console.log(info.event.end);
+                // 스터디 일정 추가
+                handleAllEventClick(info, calendar);
+            },
+        });
+    
+        calendar.render(); // 새로운 캘린더 렌더링
+    }   
+
     // 멤버 한명의 이벤트 데이터를 가져오는 함수
     async function fetchEvents() {
         try {
-            const response = await axios.get(`http://localhost:9500/member-schedule/member/${studyclubId}/${memberId}`);
+            const response = await axios.get(`http://localhost:8080/member-schedule/member/${studyclubId}/${memberId}`);
             const data = response.data;
             // 이벤트 배열 초기화
             const eventsArray = [];
@@ -152,18 +238,24 @@
             // 이벤트 배열을 ref 변수에 할당
             events.value = eventsArray;
 
-            initCalendar(events); // 캘린더 초기화
+            initMyCalendar(events); // 캘린더 초기화
         } catch (error) {
             console.error('이벤트 데이터를 불러오는 중 오류 발생:', error);
         }
     }
 
-    // 스터디클럽 모든 이벤트 데이터를 가져오는 함수
     async function allFetchEvents() {
         try {
-            const response = await axios.get(`http://localhost:9500/member-schedule/studyclub/${studyclubId}`);
+            const response = await axios.get(`http://localhost:8080/member-schedule/overlap/${studyclubId}`);
             const data = response.data;
-            // 이벤트 배열 초기화
+
+            data.memberSchedules.sort((a, b) => {
+                // 시작 시간을 비교하여 오름차순으로 정렬
+                const startComparison = new Date(a.startDatetime[0], a.startDatetime[1] - 1, a.startDatetime[2], a.startDatetime[3], a.startDatetime[4]) - new Date(b.startDatetime[0], b.startDatetime[1] - 1, b.startDatetime[2], b.startDatetime[3], b.startDatetime[4]);
+                return startComparison;
+            });
+            
+            // 전체 이벤트 배열
             const eventsArray = [];
 
             // 데이터에서 각 항목을 이벤트 객체로 변환하여 배열에 추가
@@ -174,25 +266,38 @@
                 const endDateTimeArray = schedule.endDatetime;
                 const endDateTime = new Date(endDateTimeArray[0], endDateTimeArray[1] - 1, endDateTimeArray[2], endDateTimeArray[3], endDateTimeArray[4]);
                 
-                if(!member.includes(schedule.memberId)){
-                    member.push(schedule.memberId);  
+                if(eventsArray.length !== 0){
+                    if(eventsArray[eventsArray.length-1].end.getTime() === startDateTime.getTime()){
+                        eventsArray[eventsArray.length-1].end = endDateTime;
+                    } 
+                    else {
+                        const eventObject = {
+                                start: startDateTime,
+                                end: endDateTime,
+                                memberId: memberId,
+                                studyclubId: studyclubId,
+                                color: "pink",
+                                title: '일정 추가'  // 리더만 가능
+                        };
+                        eventsArray.push(eventObject);
+                    }
+                } else {
+                        const eventObject = {
+                                start: startDateTime,
+                                end: endDateTime,
+                                memberId: memberId,
+                                studyclubId: studyclubId,
+                                color: "pink",
+                                title: '일정 추가'  // 리더만 가능
+                        };
+                        eventsArray.push(eventObject);
                 }
-                const eventObject = {
-                    id: schedule.id,
-                    start: startDateTime,
-                    end: endDateTime,
-                    memberId: schedule.memberId,
-                    studyclubId: schedule.studyclubId,
-                    color: color[member.indexOf(schedule.memberId)],
-                    editable: false,
-                };
-                eventsArray.push(eventObject);
             });
-
+            
             // 이벤트 배열을 ref 변수에 할당
             events.value = eventsArray;
 
-            initCalendar(events); // 캘린더 초기화
+            initAllCalendar(events); // 캘린더 초기화
         } catch (error) {
             console.error('이벤트 데이터를 불러오는 중 오류 발생:', error);
         }
@@ -206,7 +311,7 @@
     async function saveEventData(eventData) {
         try {
             // 서버에 데이터 전송을 위한 HTTP POST 요청
-            const response = await axios.post(`http://localhost:9500/member-schedule/save`, eventData);
+            const response = await axios.post(`http://localhost:8080/member-schedule/save`, eventData);
             console.log('이벤트 데이터가 성공적으로 저장되었습니다:', response.data);
         } catch (error) {
             console.error('이벤트 데이터를 저장하는 동안 오류가 발생했습니다:', error);
@@ -217,7 +322,7 @@
     async function modifyEventData(eventData) {
         try {
             // 서버에 데이터 전송을 위한 HTTP PUT 요청
-            const response = await axios.put(`http://localhost:9500/member-schedule/modify`, eventData);
+            const response = await axios.put(`http://localhost:8080/member-schedule/modify`, eventData);
             console.log('이벤트 데이터가 성공적으로 저장되었습니다:', response.data);
         } catch (error) {
             console.error('이벤트 데이터를 저장하는 동안 오류가 발생했습니다:', error);
@@ -229,12 +334,14 @@
         try {
             // 서버에 데이터 전송을 위한 HTTP DELETE 요청
             console.log(id);
-            const response = await axios.delete(`http://localhost:9500/member-schedule/remove/${id}`);
+            const response = await axios.delete(`http://localhost:8080/member-schedule/remove/${id}`);
             console.log('이벤트 데이터가 성공적으로 삭제 되었습니다:', response.data);
         } catch (error) {
             console.error('이벤트 데이터를 삭제하는 동안 오류가 발생했습니다:', error);
         }
     }
+
+    // 스터디 일정 추가
 
     // 이벤트 셀렉 함수
     async function handleEventSelect(info, calendar) {
@@ -375,8 +482,8 @@
         await fetchEvents();
     }
 
-    // 이벤트 클릭 함수
-    async function handleEventClick(info, calendar) {
+    // 내 이벤트 클릭 함수
+    async function handleMyEventClick(info, calendar) {
         let result = confirm('삭제 하시겠습니까?');
         let id = info.event.id;
 
@@ -387,6 +494,20 @@
             await fetchEvents();
             alert("삭제 되었습니다.");
         }
+    }
+
+    // 전체 이벤트 클릭 함수
+    async function handleAllEventClick(info, calendar){
+        router.push({
+            name: 'StudyScheduleSave',
+            params: {
+                studyclubId: info.event.studyclubId,
+                start: info.event.start,
+                end: info.event.end,
+                memberId: memberId,
+            }
+        })
+
     }
 </script>
 

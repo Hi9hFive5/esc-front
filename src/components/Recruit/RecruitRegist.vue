@@ -3,6 +3,8 @@
     import router from "@/router/router";
     import { ref } from "vue";
     import { useRoute } from 'vue-router';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
 
     const route = useRoute();
     const id = route.params.id;
@@ -40,17 +42,23 @@
 </script>
 
 <template>
-    <div class="container">
-        <div class="title">모집글 등록</div>
-        <div>
-            <div class="recruit-title">
-                <input type="text" placeholder="제목" style="width: 500px" v-model="title"></input>
+    <div class="all">
+        <Header></Header>
+        <div class="wrapper">
+            <div class="container">
+                <div class="title">모집글 등록</div>
+                <div>
+                    <div class="recruit-title">
+                        <input type="text" placeholder="제목" style="width: 500px" v-model="title"></input>
+                    </div>
+                    <div class="recruit-content">
+                        <textarea placeholder="본문" style="width: 500px" rows="20" v-model="content"></textarea>
+                    </div>
+                </div>
+                <div class="submit" @click="registRecruit()"><button>등록하기</button></div>
             </div>
-            <div class="recruit-content">
-                <textarea placeholder="본문" style="width: 500px" rows="20" v-model="content"></textarea>
-            </div>
-        </div>
-        <div class="submit" @click="registRecruit"><button>등록하기</button></div>
+        </div> 
+        <Footer></Footer>
     </div>
 </template>
 
@@ -62,6 +70,19 @@
     align-items: center;
     margin: 30px;
    }
+   .wrapper {
+    margin-left:12.5%;
+    margin-right:12.5%;
+    width:75%;
+    display: grid;
+}
+
+.all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
+
   .title {
     font-size: 30px;
     text-align: center;

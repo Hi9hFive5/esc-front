@@ -1,6 +1,9 @@
 <script setup>
     import { reactive, onMounted } from "vue";
     import { useRoute } from 'vue-router';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
+    import router from "@/router/router";
     
     const route = useRoute();
     const id = route.params.id;
@@ -150,7 +153,7 @@
             if(!response) {
                 throw new Error('Network response was not ok');
             }
-            
+            alert('수정 되었습니다!')
         } catch(error) {
             console.error('There was a problem with the fetch operation:', error.message);
         }
@@ -169,7 +172,10 @@
 </script>
 
 <template>
-    <div class="container">
+    <div class="all">
+        <Header></Header>
+        <div class="wrapper">
+            <div class="container">
         <div class="title">스터디클럽 수정</div>
         <div class="info">
             <div class="name">스터디클럽 이름: 
@@ -199,6 +205,9 @@
                 <button>수정하기</button>
             </div>
         </div> 
+        </div>
+        </div>
+        <Footer></Footer>
     </div>
 </template>
 
@@ -210,6 +219,17 @@
         align-items: center;
         margin: 30px;
    }
+   .wrapper {
+        margin-left:12.5%;
+        margin-right:12.5%;
+        width:75%;
+        display: grid;
+    }
+    .all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+        }
     .title {
         font-size: 30px;
         text-align: center;

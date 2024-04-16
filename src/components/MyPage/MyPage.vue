@@ -9,6 +9,7 @@
     <div></div>
   </div>
 </div>
+
 <div class="container">
     <div class="box">
         <p class="box-title">참여 중인 스터디</p>
@@ -74,7 +75,6 @@
 </template>
 
 <script setup>
-  import axios from 'axios';
   import { useRoute, useRouter,RouterLink } from 'vue-router';
   import { reactive, ref, onMounted } from 'vue';
   import UserProps from '@/components/MyPage/UserProps.vue';
@@ -287,6 +287,23 @@
   display: flex;
   justify-content: center;
 }
+.wrapper {
+    margin-left:12.5%;
+    margin-right:12.5%;
+    width:75%;
+    display: grid;
+}
+
+.smallPage {
+    background-color: white;
+    width: 180px;
+    height: 210px;
+    padding: 20px;
+    color: black;
+    overflow-y: auto;
+    font-size: 15px;
+
+}
 .profile img {
   margin-top: 20px;
   padding: 30px;
@@ -337,5 +354,4 @@
     src: url('@/assets/fonts/감탄로드돋움체 Bold.ttf') format('truetype');
     border: 1px solid black;
 }
-
 </style>

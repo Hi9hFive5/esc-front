@@ -5,11 +5,11 @@
                 <h1>English Study Club</h1>
             </div>
             <div class="nameTitle">
-                <h2>이름</h2>
+                <h5>이름</h5>
                 <input type="text" class="nameBox" placeholder="이름을 입력하세요" v-model.trim="memberName">
             </div>
             <div class="nicknameTitle">
-                <h2>닉네임</h2>
+                <h5>닉네임</h5>
                 <input type="text" class="nicknameBox" placeholder="닉네임을 입력하세요" v-model.trim="memberNickname">
             </div>
             <div class="findIddiv">

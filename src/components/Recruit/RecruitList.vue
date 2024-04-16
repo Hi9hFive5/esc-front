@@ -3,10 +3,13 @@
     import RecruitCard from './RecruitCard.vue';
     import { useRouter } from 'vue-router';
     import axios from "axios";
-
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
+    
     const router = useRouter();
     const userInfo = ref(null);
     const loaded = ref(false); 
+    let loginCheck = false;
 
     const navigateTo = (path) => {
         router.push(path);
@@ -91,6 +94,7 @@
 
         if (token) {
         fetchUserInfo(token);
+        loginCheck = true;
         } else {
         console.error('토큰이 없습니다.');
         }
@@ -99,23 +103,30 @@
 </script>
 
 <template>
-    <div class="filter">
-        <form class="sort">
-            <label>
-                <input type="radio" name="filter" value="recent"> 최신순 &nbsp;
-            </label>
-            <label>
-                <input type="radio" name="filter" value="popular"> 인기순
-            </label>
-        </form>
-        <select class="category" v-model="selectedCategory">
-            <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
-        </select>
-        <div class="fixed" @click="makeStudyClub()">스터디클럽 생성하기</div>
+    <div class="all">
+    <Header></Header>
+    <div class="wrapper">
+        <div class="filter">
+            <form class="sort">
+                <label>
+                    <input type="radio" name="filter" value="recent"> 최신순 &nbsp;
+                </label>
+                <label>
+                    <input type="radio" name="filter" value="popular"> 인기순
+                </label>
+            </form>
+            <select class="category" v-model="selectedCategory">
+                <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
+            </select>
+            <div class="fixed" v-if="loginCheck" @click="makeStudyClub()">스터디클럽 생성하기</div>
+        </div>
+        <div>
+            <RecruitCard class="card" v-for="recruit in state.recruitList" :key="recruit.id" :recruit="recruit"></RecruitCard>
+        </div>
     </div>
-    <div>
-        <RecruitCard class="card" v-for="recruit in state.recruitList" :key="recruit.id" :recruit="recruit"></RecruitCard>
-    </div>
+    
+    <Footer></Footer>
+</div>
 </template>
 
 <style scoped>
@@ -123,13 +134,26 @@
         font-family: "감탄로드돋움체 Bold";
         src: url("@/assets/fonts/감탄로드돋움체 Bold.ttf") format("truetype");
     }
+    .all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
+
     body * {
         font-family: "감탄로드돋움체 Bold", sans-serif;
+    }
+    .wrapper {
+        margin-left:12.5%;
+        margin-right:12.5%;
+        width:75%;
+        display: grid;
     }
    .filter {
         margin: 20px 15px;
         display: flex;
         justify-content: space-between;
+        margin-top: 5%;
     }
     .card {
         margin: 10px 0px;

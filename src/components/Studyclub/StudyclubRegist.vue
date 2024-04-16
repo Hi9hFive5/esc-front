@@ -2,6 +2,8 @@
     import router from "@/router/router";
     import { reactive, ref, onMounted } from "vue";
     import { useRoute } from 'vue-router';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
     
     const route = useRoute();
     const id = route.params.id;
@@ -113,37 +115,46 @@
 </script>
 
 <template>
-    <div class="container">
-        <div class="title">스터디클럽 등록</div>
-        <div class="info">
-            <div class="name">스터디클럽 이름: 
-                <input class="content" v-model="name"/>
+    <div class="all">
+
+    <Header></Header>
+    
+        <div class="wrapper">
+            <div class="container">
+                <div class="title">스터디클럽 등록</div>
+                <div class="info">
+                    <div class="name">스터디클럽 이름: 
+                        <input class="content" v-model="name"/>
+                    </div>
+                    <div class="introduce">스터디클럽 소개: </div>
+                        <textarea class="content" cols="50" rows="5" v-model="introduce"/>
+                    <div class="number">스터디클럽 정원: 
+                        <input type="number" class="content" v-model="memberLimit"/>
+                    </div>
+                    <div class="category">스터디클럽 카테고리: 
+                        <select class="content" v-model="selectedCategory" @change="fetchGoals(), fetchExams()">
+                            <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
+                        </select>
+                    </div>
+                    <div class="date">스터디클럽 시험일: 
+                        <select class="content" v-model="selectedExam">
+                            <option v-for="item in state.exams" :value="item.id"> {{ item.examDate.substring(0, 10) }} </option>
+                        </select>
+                    </div>
+                    <div class="goal">스터디클럽 목표 점수: 
+                        <select class="content" v-model="selectedGoal">
+                            <option v-for="item in state.goals" :value="item.id"> {{ item.score }} </option>
+                        </select>
+                    </div>
+                    <div class="submit" @click="registStudyClub">
+                        <button>등록하기</button>
+                    </div>
+                </div> 
             </div>
-            <div class="introduce">스터디클럽 소개: </div>
-                <textarea class="content" cols="50" rows="5" v-model="introduce"/>
-            <div class="number">스터디클럽 정원: 
-                <input type="number" class="content" v-model="memberLimit"/>
-            </div>
-            <div class="category">스터디클럽 카테고리: 
-                <select class="content" v-model="selectedCategory" @change="fetchGoals(), fetchExams()">
-                    <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
-                </select>
-            </div>
-            <div class="date">스터디클럽 시험일: 
-                <select class="content" v-model="selectedExam">
-                    <option v-for="item in state.exams" :value="item.id"> {{ item.examDate.substring(0, 10) }} </option>
-                </select>
-            </div>
-            <div class="goal">스터디클럽 목표 점수: 
-                <select class="content" v-model="selectedGoal">
-                    <option v-for="item in state.goals" :value="item.id"> {{ item.score }} </option>
-                </select>
-            </div>
-            <div class="submit" @click="registStudyClub">
-                <button>등록하기</button>
-            </div>
-        </div> 
-    </div>
+        </div>
+    
+    <Footer></Footer>
+</div>
 </template>
 
 <style scoped>
@@ -154,6 +165,18 @@
         align-items: center;
         margin: 30px;
    }
+   .wrapper {
+    margin-left:12.5%;
+    margin-right:12.5%;
+    width:75%;
+    display: grid;
+}
+   .all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+    }
+
     .title {
         font-size: 30px;
         text-align: center;
