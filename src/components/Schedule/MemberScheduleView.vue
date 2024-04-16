@@ -2,7 +2,12 @@
     <Header></Header>
     <div id="app">
         <div id="calendar"></div>
+        <div class="schedule-button">
+            <button @click="navigateToStudy">스터디</button>
+            <button @click="navigateToStudySchedule">스터디 일정 보기</button>
+        </div>
     </div>
+
     <Footer></Footer>
 </template>
 
@@ -82,23 +87,23 @@
                     calendar.nextYear();
                     }
                 },
+                customMy: {
+                    text: 'My',
+                    click: function() {
+                        fetchEvents();
+                    }
+                },
                 customAll: {
                     text: 'All',
                     click: function() {
                         allFetchEvents();
                     }
                 },
-                customMy: {
-                    text: 'My',
-                    click: function() {
-                        fetchEvents();
-                    }
-                }
             },
             headerToolbar: {
                 left: 'customPrevY,customPrev,customToday,customNext,customNextY',
                 center: 'title',
-                right: 'customAll,customMy'
+                right: 'customMy,customAll'
             },
             events: events.value,
             editable: true,
@@ -178,13 +183,13 @@
                     }
                 },
                 customAll: {
-                    text: 'All',
+                    text: 'All', // 겹치는 전체 일정 조회
                     click: function() {
                         allFetchEvents();
                     }
                 },
                 customMy: {
-                    text: 'My',
+                    text: 'My', // 내가 추가한 일정 조회
                     click: function() {
                         fetchEvents();
                     }
@@ -193,7 +198,7 @@
             headerToolbar: {
                 left: 'customPrevY,customPrev,customToday,customNext,customNextY',
                 center: 'title',
-                right: 'customAll,customMy'
+                right: 'customMy,customAll'
             },
             events: events.value,
             eventClick: function(info) {
@@ -212,7 +217,7 @@
     // 멤버 한명의 이벤트 데이터를 가져오는 함수
     async function fetchEvents() {
         try {
-            const response = await axios.get(`http://localhost:8080/member-schedule/member/${studyclubId}/${memberId}`);
+            const response = await axios.get(`http://localhost:30003/member-schedule/member/${studyclubId}/${memberId}`);
             const data = response.data;
             // 이벤트 배열 초기화
             const eventsArray = [];
@@ -246,7 +251,7 @@
 
     async function allFetchEvents() {
         try {
-            const response = await axios.get(`http://localhost:8080/member-schedule/overlap/${studyclubId}`);
+            const response = await axios.get(`http://localhost:30003/member-schedule/overlap/${studyclubId}`);
             const data = response.data;
 
             data.memberSchedules.sort((a, b) => {
@@ -311,7 +316,7 @@
     async function saveEventData(eventData) {
         try {
             // 서버에 데이터 전송을 위한 HTTP POST 요청
-            const response = await axios.post(`http://localhost:8080/member-schedule/save`, eventData);
+            const response = await axios.post(`http://localhost:30003/member-schedule/save`, eventData);
             console.log('이벤트 데이터가 성공적으로 저장되었습니다:', response.data);
         } catch (error) {
             console.error('이벤트 데이터를 저장하는 동안 오류가 발생했습니다:', error);
@@ -322,7 +327,7 @@
     async function modifyEventData(eventData) {
         try {
             // 서버에 데이터 전송을 위한 HTTP PUT 요청
-            const response = await axios.put(`http://localhost:8080/member-schedule/modify`, eventData);
+            const response = await axios.put(`http://localhost:30003/member-schedule/modify`, eventData);
             console.log('이벤트 데이터가 성공적으로 저장되었습니다:', response.data);
         } catch (error) {
             console.error('이벤트 데이터를 저장하는 동안 오류가 발생했습니다:', error);
@@ -334,7 +339,7 @@
         try {
             // 서버에 데이터 전송을 위한 HTTP DELETE 요청
             console.log(id);
-            const response = await axios.delete(`http://localhost:8080/member-schedule/remove/${id}`);
+            const response = await axios.delete(`http://localhost:30003/member-schedule/remove/${id}`);
             console.log('이벤트 데이터가 성공적으로 삭제 되었습니다:', response.data);
         } catch (error) {
             console.error('이벤트 데이터를 삭제하는 동안 오류가 발생했습니다:', error);
@@ -508,6 +513,14 @@
             }
         })
 
+    }
+
+    const navigateToStudy = () => {
+      router.push(`/studyclub/${studyclubId}`);
+    }
+
+    const navigateToStudySchedule = () => {
+      router.push(`/study-schedule/${studyclubId}`);
     }
 </script>
 
