@@ -1,26 +1,35 @@
 <template>
-    <div class="post-header">
-        <div class="title-area">
-            <div class="title">{{ logData.content }}</div>
-            <div class="createdDate">{{ logData.studydate }} ~ {{ logData.enrolldate }}</div>
+    <div class="all">
+        <Header></Header>
+        <div class="wrapper">
+            <div class="post-header">
+                <div class="title-area">
+                    <div class="title">{{ logData.content }}</div>
+                    <div class="createdDate">{{ logData.studydate }} ~ {{ logData.enrolldate }}</div>
+                </div>
+                <div class="writer-area">
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="section">
+                    <div class="section-title">🌟 스터디 내용 </div>
+                    <div class="section-content">{{ logData.contentInfo }}</div> 
+                </div>
+                <hr>
+            </div>
         </div>
-        <div class="writer-area">
-        </div>
+        <Footer></Footer>
     </div>
-    <hr>
-    <div>
-        <div class="section">
-            <div class="section-title">🌟 스터디 내용 </div>
-            <div class="section-content">{{ logData.content }}</div> 
-        </div>
-        <hr>
-    </div>
+   
 </template>
 
 <script setup>
-  import axios from 'axios';
-  import { useRoute,RouterLink } from 'vue-router';
-  import { ref, onMounted } from 'vue';
+    import axios from 'axios';
+    import { useRoute,RouterLink } from 'vue-router';
+    import { ref, onMounted } from 'vue';
+    import Header from "@/components/Header/Header.vue";
+    import Footer from "@/components/Footer/Footer.vue";
     
     const route = useRoute();
     const id = route.params.id;
@@ -32,7 +41,7 @@
       const response = await axios.get(`http://localhost:30003/studyLog/find/${id}`)
 
       logData.value = response.data 
-
+            console.log(logData.value)
     } catch (error) {
       console.error('데이터를 받아오는 중 에러 발생:', error);
     }
@@ -46,11 +55,25 @@
         justify-content: space-between;
         margin-top: 20px;
     }
+    .wrapper {
+        margin-left:12.5%;
+        margin-right:12.5%;
+        width:75%;
+        display: grid;
+    
+    }
+    .all {
+        display: grid;
+        grid-template-rows: 100px minmax(780px, auto) 200px;
+        align-items: center;
+        
+        }
     .title {
         text-align: center;
         font-size: 35px;
         margin: 10px;
         margin-bottom: 20px;
+        
     }
     .createdDate {
         color: gray;

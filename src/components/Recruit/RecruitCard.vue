@@ -119,7 +119,7 @@ onMounted(async() => {
   await fetchCategory(state.studyclub.id);
   await fetchGoal(state.studyclub.id);
   await fetchExam(state.studyclub.id);
-  await fetchWriter(state.studyclub.id);
+  await fetchWriter(state.studyclub.leaderId);
 });
 </script>
 
@@ -164,6 +164,7 @@ onMounted(async() => {
 .card-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .content {
   display: flex;

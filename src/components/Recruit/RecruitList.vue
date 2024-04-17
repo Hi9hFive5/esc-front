@@ -114,15 +114,15 @@
         <div class="filter">
             <form class="sort">
                 <label>
-                    <input type="radio" name="filter" value="recent"> 최신순 &nbsp;
+                    <button type="button" class="btn" data-bs-toggle="button">오픽</button>  
                 </label>
                 <label>
-                    <input type="radio" name="filter" value="popular"> 인기순
+                    <button type="button" class="btn" data-bs-toggle="button">토스</button> 
+                </label>
+                <label>
+                    <button type="button" class="btn" data-bs-toggle="button">토익</button> 
                 </label>
             </form>
-            <select class="category" v-model="selectedCategory">
-                <option v-for="item in state.category" :value="item.id"> {{ item.studyName }} </option>
-            </select>
             <div class="fixed" @click="makeStudyClub()">스터디클럽 생성하기</div>
         </div>
         <div>
