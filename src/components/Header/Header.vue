@@ -65,7 +65,7 @@
 
     if (tokenParts.length === 3) {
         const payload = decodeBase64(tokenParts[1]);
-        axios.get(`http://localhost:30003/user/info/${payload.sub}`)
+        axios.get(`/api/user/info/${payload.sub}`)
         .then(response => {
             userInfo.value = response.data;
         })

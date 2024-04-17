@@ -21,7 +21,7 @@
 
   const fetchRecruit = async(id) => {
     try {
-        const response = await fetch(`/api/recruit/detail/${id}`);
+        const response = await fetch(`http://localhost:8080/recruit/detail/${id}`);
         
         if(!response.ok) {
             throw new Error('response is not ok');
@@ -43,14 +43,14 @@
 </script>
 
 <template>
-    <div class="component" v-if="props.studyclub" @click="navigateTo(`/studyclub/${props.studyclub.id}`)">{{ studyclub.name }}</div>
-    <div class="component" v-if="props.application" @click="navigateTo(`/recruit/${state.recruit.id}`)">{{ state.recruit["title"] }}&nbsp;&nbsp;&nbsp;
-      <span class="status" v-if="application.recruitStatus =='대기'">{{ application.recruitStatus }}</span>
-      <span class="status-Y" v-if="application.recruitStatus =='수락'">{{ application.recruitStatus }}</span>
-      <span class="status-N" v-if="application.recruitStatus =='거절'">{{ application.recruitStatus }}</span>
-    </div>
-    <div class="component" v-if="props.log">{{ log["content"] }}</div>
-    <div class="component" v-if="props.recruit" @click="navigateTo(`/recruit/${props.recruit.id}`)">{{ recruit["title"] }}</div>
+    <li class="list-group-item" v-if="props.studyclub" @click="navigateTo(`/studyclub/${props.studyclub.id}`)">{{ studyclub.name }}</li>
+    <li class="list-group-item" id="application" v-if="props.application" @click="navigateTo(`/recruit/${state.recruit.id}`)">{{ state.recruit["title"] }}&nbsp;&nbsp;&nbsp;
+      <span class="badge text-bg-secondary" v-if="application.recruitStatus =='대기'">{{ application.recruitStatus }}</span>
+      <span class="badge text-bg-success" v-if="application.recruitStatus =='수락'">{{ application.recruitStatus }}</span>
+      <span class="badge text-bg-danger" v-if="application.recruitStatus =='거절'">{{ application.recruitStatus }}</span>
+    </li>
+    <li class="list-group-item" v-if="props.log">{{ log["content"] }}</li>
+    <li class="list-group-item" v-if="props.recruit" @click="navigateTo(`/recruit/${props.recruit.id}`)">{{ recruit["title"] }}</li>
 </template>
 <style>
     .component {
@@ -58,18 +58,8 @@
       display: flex;
       justify-content: space-between;
     }
-    .application {
+    #application {
       display: flex;
       justify-content: space-between;
-    }
-    .status {
-      color: grey;
-      margin: 10px;
-    }
-    .status-Y {
-      color: rgb(16, 185, 16);
-    }
-    .status-N {
-      color: red;
     }
 </style>

@@ -21,7 +21,7 @@
 
     if (tokenParts.length === 3) {
         const payload = decodeBase64(tokenParts[1]);
-        axios.get(`/api/user/info/${payload.sub}`)
+        axios.get(`http://localhost:8080/user/info/${payload.sub}`)
         .then(response => {
             userInfo.value = response.data;
             if(state.recruit["writerId"] == userInfo.value.id){
@@ -54,7 +54,7 @@
 
     const fetchRecruit = async(id) => {
         try {
-            const response = await fetch(`/api/recruit/detail/${id}`);
+            const response = await fetch(`http://localhost:8080/recruit/detail/${id}`);
             
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -70,7 +70,7 @@
 
     const fetchStudyclub = async(id) => {
         try {
-            const response = await fetch(`/api/studyclub/detail/${id}`);
+            const response = await fetch(`http://localhost:8080/studyclub/detail/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -86,7 +86,7 @@
 
     const fetchCategory = async(id) => {
         try {
-            const response = await fetch(`/api/studyclub/category/${id}`);
+            const response = await fetch(`http://localhost:8080/studyclub/category/${id}`);
 
             if(!response.ok) {
                 throw new Error('response is not ok');
@@ -102,7 +102,7 @@
 
     const fetchExam = async(id) => {
         try {
-                const response = await fetch(`/api/studyclub/study-exam/${id}`);
+                const response = await fetch(`http://localhost:8080/studyclub/study-exam/${id}`);
 
                 if(!response.ok) {
                     throw new Error('response is not ok');
@@ -119,7 +119,7 @@
 
     const fetchWriter = async(id) => {
         try {
-                const response = await fetch(`/api/user/${id}`);
+                const response = await fetch(`http://localhost:8080/user/${id}`);
 
                 if(!response.ok) {
                     throw new Error('response is not ok');
@@ -140,7 +140,7 @@
         }
     
         try {
-            const response = await fetch(`/api/recruit-apply/regist/${id}/${postData.userId}`, {
+            const response = await fetch(`http://localhost:8080/recruit-apply/regist/${id}/${postData.userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

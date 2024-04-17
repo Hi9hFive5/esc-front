@@ -1,45 +1,55 @@
 <template>
     <div class="container">
         <div class="boxdiv">
+            <div>멤버</div>
             <div class="contentdiv">
-                멤버
-                <RouterLink v-for="userinfo in userinfos" :to="{ path: `/anotherpage/${userinfo.id}` }"
-                    :key="userinfo.id">
-                    <p>{{ userinfo.name }} </p>
-                </RouterLink>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" v-for="userinfo in userinfos" :to="{ path: `/anotherpage/${userinfo.id}` }"
+                    :key="userinfo.id">{{ userinfo.name }}  
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="boxdiv">
-            <div class="contentdiv">
-
-                <div class="log">
-                    로그
-                    <p></p>
-                    <p></p>
-                    <button @click="goToLogPage">로그 적기</button>
-                </div>
-                <RouterLink v-for="studylog in studylogs" :to="{ path: `/studyLog/${studylog.studyclubId}` }"
-                    :key="studylog.id">
-                    <p>{{ studylog.content }} </p>
-                </RouterLink>
+            <div class="title-area">
+                <div >스터디 일정 목록</div>
+                <div class="added" style="margin-right: 10px; color: grey;" @click.stop="viewSchedule()">더보기 ></div>
             </div>
-        </div>
-        <div class="boxdiv">
             <div class="contentdiv">
-                <div class="title">스터디 일정 목록</div>
-                <div class="buttondiv">
-                    <button class="added" @click.stop="viewCalendar()">+ 일정 추가</button>
-                    <button class="added" @click.stop="viewSchedule()">+ 더보기</button>
-                </div>
-                <div v-for="(row, index) in schedules" class="things">
-                    <div class="items">
-                        <span>{{ index + 1 }}. {{ row.title }}</span>
-                        <!-- <button class="detail-btn" @click.stop="navigateToDetail(row.id)">상세</button> -->
-                    </div>
-                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" v-for="item in schedules">
+                        <div class="name">{{ item.title }}</div>
+                        <div class="date">{{ item.start }}&nbsp;&nbsp; ~ &nbsp;&nbsp;{{ item.end }}</div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
+    <div class="boxdiv">
+        <div class="title-area">
+                <div>로그</div>
+                <div style=" font-size: 30px; text-align: right; margin:-11px 0px; margin-right: 15px;" @click="goToLogPage"> + </div>
+        </div>
+        <div class="contentdiv">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+               <div class="accordion-item" v-for="log in studylogs" :value="log" :key="log.id" :log="log">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#flush-collaps${log.id}`" aria-expanded="false" :aria-controls="`#flush-collapse${log.id}`">
+                      {{ log.content }}
+                    </button>
+                  </h2>
+                  <div :id="`flush-collaps${log.id}`" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                      <div class="apply-name">{{ log.content }}</div>
+                    </div>
+                    <hr>
+                    <div style="text-align: center; margin-bottom: 15px;" @click="navigateTo(`/studyLog/${log.id}`)">수정하기</div>
+                  </div>
+
+              </div>
+            </div>
+        </div>
+        </div>
 </template>
 
 <script setup>
@@ -59,11 +69,9 @@ const studyclubId = router.currentRoute.value.params.id;
 const id = route.params.id;
 
 const schedules = ref([]);
-
-
-
 const userInfo = ref(null);
 const loaded = ref(false);
+const studylogs = ref([]);
 
 function decodeBase64(str) {
     const decoded = atob(str);
@@ -91,9 +99,9 @@ function fetchUserInfo(token) {
     }
 }
 
-const fetchStudySchedules = async (id) => {
+const fetchStudySchedules = async () => {
     try {
-        const response = await axios.get(`http://localhost:30003/study-schedule/studyclub/${id}`);
+        const response = await axios.get(`/api/study-schedule/studyclub/${id}`);
         const data = response.data;
         console.log(data);
 
@@ -125,38 +133,60 @@ const fetchStudySchedules = async (id) => {
     }
 };
 
+const fetchStudyLogs = async () => {
+    try {
+          const response = await fetch(`/api/studyLog/findStudyclubLog/${id}`);
+
+          if(!response.ok) {
+              throw new Error('response is not ok');
+          }
+
+          const data = await response.json();
+          studylogs.value = data;
+          console.log(studylogs.value);
+
+      } catch(error) {
+          console.error('fetch error: ' + error.message);
+      }
+}
+
+const navigateTo = (path) => {
+        router.push(path);
+    }
+
 onMounted(async () => {
 
     try {
-        const response1 = await axios.get(`http://localhost:30003/user/findJoinMemberAndName/${studyclubId}`)
+        const response1 = await axios.get(`/api/user/findJoinMemberAndName/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         userinfos.value = response1.data
         console.log(userinfos);
 
-        const response2 = await axios.get(`http://localhost:30003/studyLog/findStudyclubLog/${studyclubId}`)
+        const response2 = await axios.get(`/api/studyLog/findStudyclubLog/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         studylogs.value = response2.data
         console.log(studylogs);
 
-        await fetchStudySchedules(id);
-
+        
         const token = localStorage.getItem('token');
-
+        
         if (token) {
             fetchUserInfo(token);
-
+            
         } else {
             console.error('토큰이 없습니다.');
         }
-
-
-
+        
+        
     } catch (error) {
         console.error('데이터를 받아오는 중 에러 발생:', error);
     }
+    
+    await fetchStudySchedules(id);
+    await fetchStudyLogs();
 });
 
-const studylogs = ref([]);
+
 
 const studyschedules = ref([]);
 function goToLogPage() {
@@ -176,25 +206,32 @@ const viewSchedule = () => {
 <style scoped>
 .container {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
-
-.container {
-    margin-top: 60px;
-}
-
 .contentdiv {
+    flex-grow: 1;
     text-align: center;
-}
-
-.boxdiv {
     border: 1px solid black;
-    height: 300px;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-top: 10px;
 }
-
-.log {
-    justify-content: space-between;
+.boxdiv {
     display: flex;
+    flex-direction: column;
+}
+.title-area {
+    display: flex;
+    justify-content: space-between
+}
+.log {
+    display: flex;
+    justify-content: space-between;
+}
+.date {
+    font-size: 12px;
 }
 </style>

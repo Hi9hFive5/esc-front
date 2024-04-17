@@ -23,10 +23,11 @@
     margin-right:12.5%;
     width:75%;
     display: grid;
+    height: fit-content
 }
 .all {
-        display: grid;
-        grid-template-rows: 100px minmax(780px, auto) 200px;
-        align-items: center;
-    }
+    display: grid;
+    grid-template-rows: 100px minmax(780px, auto) 200px;
+    align-items: center;
+}
 </style>

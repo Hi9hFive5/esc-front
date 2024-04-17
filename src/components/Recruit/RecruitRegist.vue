@@ -76,13 +76,11 @@
     width:75%;
     display: grid;
 }
-
 .all {
         display: grid;
         grid-template-rows: 100px minmax(780px, auto) 200px;
         align-items: center;
     }
-
   .title {
     font-size: 30px;
     text-align: center;
