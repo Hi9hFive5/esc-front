@@ -203,13 +203,19 @@ async function removeParticipant(id) {
             <div class="container">
                 <div class="title">스터디 일정</div>
                 <div class="info">
-                    <div class="name">제목:
-                        <input v-if="!isReadOnly" class="content" v-model="title" />
-                        <span v-else class="content">{{ title }}</span>
+                    <div class="form-floating" v-if="!isReadOnly">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 50px" v-model="title"></textarea>
+                    <label for="floatingTextarea2">제목</label>
                     </div>
-                    <div class="introduce">내용: </div>
-                    <textarea v-if="!isReadOnly" class="content" cols="50" rows="5" v-model="content" />
-                    <span v-else>{{ content }}</span>
+                    <div v-else class="content">{{ title }}</div>
+                    <div class="form-floating" v-if="!isReadOnly">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 300px" v-model="content"></textarea>
+                    <label for="floatingTextarea2">내용</label>
+                    </div>
+                    <div class="schedule-content" v-else>
+                        <hr>
+                        {{ content }}
+                    </div>
                     <div class="date">시작 시간:
                         <input v-if="!isReadOnly" type="datetime-local" class="content" v-model="start">
                         <span v-else>{{ start }}</span>
@@ -225,12 +231,16 @@ async function removeParticipant(id) {
                                 <option disabled value="">선택해주세요</option>
                                 <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
                             </select>
-                            <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
-                                <div>{{ item.name }}</div>
-                                <button @click="removeParticipant(item.id)">x</button>
+                            <div class="member-info">
+                                <div class="selectedMember2" v-for="item in selectedMembers" :value="item.id">
+                                    <div class="name-button">
+                                        <div class="member-name">{{ item.name }}</div>
+                                        <button class="remove-button" @click="removeParticipant(item.id)">x</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div v-else class="selectedMember">
+                        <div v-else class="selectedMember1">
                             참여 멤버:
                             <div class="member-info">
                                 <div v-for="item in selectedMembers" :value="item.id">
@@ -241,11 +251,11 @@ async function removeParticipant(id) {
                     </div>
                     <div class="submit">
                         <div v-if="modifyCheck">
-                        <button v-if="!isReadOnly" @click="saveStudySchedule()">저장하기</button>
-                        <button v-if="!isReadOnly" @click="removeStudySchedule()">삭제하기</button>
-                        <button v-else @click="isReadOnly = false">수정하기</button>
-                    </div>
-                    <div v-else> </div>
+                            <button class="btn btn-dark" v-if="!isReadOnly" @click="saveStudySchedule()">저장하기</button>
+                            <button class="btn btn-dark" v-if="!isReadOnly" @click="removeStudySchedule()">삭제하기</button>
+                            <button class="btn btn-dark" v-else @click="isReadOnly = false">수정하기</button>
+                        </div>
+                        <div v-else> </div>
                     </div>
                 </div>
             </div>
@@ -264,6 +274,7 @@ async function removeParticipant(id) {
     justify-content: center;
     align-items: center;
     margin: 30px;
+    width: 100%;
 }
 
 .title {
@@ -275,6 +286,7 @@ async function removeParticipant(id) {
 .info {
     margin: 40px;
     align-items: center;
+    /* width: 100%; */
 }
 
 .info div {
@@ -291,11 +303,7 @@ async function removeParticipant(id) {
     padding: 20px;
 }
 
-.selectedMember {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+
 
 .wrapper {
     margin-left: 12.5%;
@@ -308,5 +316,55 @@ async function removeParticipant(id) {
     display: grid;
     grid-template-rows: 100px minmax(780px, auto) 200px;
     align-items: center;
+}
+
+.schedule-content {
+    min-height: 300px;
+}
+
+.scheduleInfoModify {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.selectedMember1 {
+    display: flex;
+    justify-content: wrap;
+    align-items: center;
+}
+
+.selectedMember2 {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+
+.member-info {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+/* .member-name {
+    margin-right: 10px;
+    멤버 이름과 삭제 버튼 사이의 간격을 설정합니다.
+} */
+
+.name-button {
+    display: flex;
+    align-items: center;
+}
+
+.name-button>div {
+    margin-right: 5px;
+}
+
+.remove-button {
+    /* background-color: transparent; 배경색을 투명하게 설정하여 버튼 스타일을 설정합니다. */
+    /* border: none; 테두리를 없애줍니다. */
+    cursor: pointer;
+    /* 커서를 포인터로 변경하여 클릭 가능함을 나타냅니다. */
+    /* color: red; 삭제 버튼의 색상을 설정합니다. */
 }
 </style>
