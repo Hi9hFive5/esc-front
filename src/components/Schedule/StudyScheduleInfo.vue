@@ -284,9 +284,8 @@ async function removeParticipant(id) {
 }
 
 .info {
-    margin: 40px;
     align-items: center;
-    /* width: 100%; */
+    width: 100%;
 }
 
 .info div {
