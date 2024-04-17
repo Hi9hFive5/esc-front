@@ -50,18 +50,14 @@ const tokenData = async () => {
         password: password.value
     }).then ((response) => {    // then: post 요청 성공 시 동작할 콜백 함수 등록
         if(response.status == 200) {
-            console.log('response status: ', response.status);
-            console.log('response headers: ', response.headers);
-
             // 토큰 및 아이디 로컬 스토리지에 저장
             localStorage.setItem('token', response.headers.token);
             // localStorage.setItem('email', email.value)
             
-        
+            alert('로그인 되었습니다!')
             router.push('/'); 
         }
     }).catch ((e) => {
-        console.log('로그인 실패');
         alert('입력한 정보가 유효하지 않습니다. 아이디와 비밀번호를 확인해주세요.');
     })
 };
