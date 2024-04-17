@@ -43,7 +43,7 @@
                       <div class="apply-name">{{ log.contentInfo }}</div>
                     </div>
                     <hr>
-                    <div style="text-align: center; margin-bottom: 15px;" @click="navigateTo(`/studyLog/${log.id}`)">자세히 보기 &nbsp; ></div>
+                    <div style="text-align: center; margin-bottom: 15px; color: grey" @click="navigateTo(`/studyLog/${log.id}`)">자세히 보기 &nbsp; ></div>
                   </div>
 
               </div>
