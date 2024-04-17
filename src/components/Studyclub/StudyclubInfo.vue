@@ -87,8 +87,6 @@
   const calcDate = (date) => {
 
     const currentDate = new Date(new Date().toISOString().slice(0, 10));
-    console.log(date);
-
     return Math.trunc((new Date(date) - currentDate) / (1000 * 60 * 60 * 24));
   };
 

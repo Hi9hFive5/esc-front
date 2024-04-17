@@ -30,7 +30,6 @@ function fetchUserInfo(token) {
     axios.get(`/api/user/info/${payload.sub}`)
       .then(response => {
         userInfo.value = response.data;
-        console.log('로그인: ', userInfo.value.id);
       })
       .catch(error => {
         console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
@@ -45,11 +44,9 @@ function fetchUserInfo(token) {
 
 
 const fetchStudySchedules = async (id) => {
-  console.log(id);
   try {
     const response = await axios.get(`http://localhost:30003/study-schedule/studyclub/${id}`);
     const data = response.data;
-    console.log(data);
 
     const scheduleArray = [];
 
@@ -73,7 +70,6 @@ const fetchStudySchedules = async (id) => {
     });
 
     schedules.value = scheduleArray;
-    console.log(schedules.value);
 
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error.message);

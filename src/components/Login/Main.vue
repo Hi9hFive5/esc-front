@@ -108,7 +108,6 @@ function handleScroll() {
     if (window.scrollY >= third.offsetTop) {
         // 현재 스크롤 위치가 'third' 섹션의 시작점 이하일 경우
         window.scrollTo(second.offsetTop);
-        console.log("1");
     } else if (window.scrollY + window.innerHeight >= second.offsetTop) {
         // 현재 스크롤 위치가 'second' 섹션의 시작점 이하일 경우
         window.scrollTo(second.offsetTop);

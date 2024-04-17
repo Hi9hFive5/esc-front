@@ -42,8 +42,6 @@ function fetchUserInfo(token) {
         axios.get(`/api/user/info/${payload.sub}`)
             .then(response => {
                 userInfo.value = response.data;
-                console.log('작성자: ', writerId.value);
-                console.log('로그인: ', userInfo.value.id);
                 if (writerId.value == userInfo.value.id) {
                     modifyCheck.value = true;
                 } else {
@@ -69,7 +67,6 @@ const fetchStudySchedule = async (id) => {
     try {
         const response = await axios.get(`http://localhost:30003/study-schedule/schedule/${id}`);
         const data = response.data;
-        console.log(data);
         const startDate = moment(data.start).format('YYYY-MM-DDTHH:mm');
         const endDate = moment(data.end).format('YYYY-MM-DDTHH:mm');
 
@@ -93,8 +90,6 @@ async function fetchMember() {
         const data = response.data;
 
         members.value = data;
-        console.log('패치');
-        console.log(members.value);
     } catch (error) {
         console.error('이벤트 데이터를 불러오는 중 오류 발생:', error);
     }
@@ -110,9 +105,6 @@ onMounted(async () => {
     await fetchStudySchedule(id);
     await fetchMember();
 
-    console.log('시작');
-    console.log(participantList.value);
-    console.log(members.value);
 
     for (const member of members.value) {
         if (participantList.value.includes(member.id)) {
@@ -130,7 +122,6 @@ onMounted(async () => {
     } else {
         console.error('토큰이 없습니다.');
     }
-    console.log('유저 정보: ', userInfo.value);
 })
 
 async function saveStudySchedule() {
@@ -154,7 +145,6 @@ async function saveStudySchedule() {
         useStatus: useStatus.value,
         participantList: select,
     };
-    console.log(sendData);
 
     await axios.put(
         `http://localhost:30003/study-schedule/modify`,
@@ -173,9 +163,6 @@ async function removeStudySchedule() {
     router.push(`/study-schedule/${studyclubId.value}`);
 }
 
-
-
-console.log(unselectedMembers);
 // 선택된 멤버 추가
 function addParticipant(id) {
     const index = unselectedMembers.value.findIndex(member => member.id === id);

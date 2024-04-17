@@ -75,7 +75,6 @@ async function saveStudySchedule() {
         writerId: memberId,        //추후 변경
         participantList: select
     }
-    console.log(postData);
 
     try {
         await axios.post(

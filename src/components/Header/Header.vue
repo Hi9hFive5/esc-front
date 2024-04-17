@@ -35,7 +35,7 @@
 
     function msg() {
         if(loginCheck == true) {
-            alert('지금바로 스터디클럽을 만들어 공부를 시작해봐요~')
+            alert('지금 바로 스터디클럽을 만들어 공부를 시작해봐요~')
             router.push(`/studyclub-regist/${userInfo.value.id}`);
         }
         else {

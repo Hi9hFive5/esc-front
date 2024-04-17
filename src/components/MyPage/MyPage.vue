@@ -60,7 +60,7 @@
                       </div>
                     </div>
                     <hr>
-                    <div style="text-align: center; margin-bottom: 15px;" @click="navigateTo(`/recruit/${recruit.id}`)">모집글으로 이동</div>
+                    <div class="moveNext" style="text-align: center; margin-bottom: 15px;" @click="navigateTo(`/recruit/${recruit.id}`)">모집글으로 이동</div>
                   </div>
               </div>
             </div>
@@ -140,9 +140,6 @@
 
       const data = await response.json();
       state.userApplications = data;
-
-      console.log(state.userApplications);
-
     } catch(error) {
         console.error('fetch error: ' + error.message);
     }
@@ -158,8 +155,6 @@
 
       const data = await response.json();
       state.userLogs = data;
-
-      console.log(state.userLogs);
 
     } catch(error) {
         console.error('fetch error: ' + error.message);
@@ -368,8 +363,18 @@
 .apply-buttons {
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 #recruit-box {
   margin-bottom: 100px;
+}
+.list-group {
+  cursor: pointer;
+}
+.accordion-button {
+  cursor: pointer;
+}
+.moveNext {
+  cursor: pointer;
 }
 </style>

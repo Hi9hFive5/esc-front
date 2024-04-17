@@ -67,16 +67,11 @@ const isTrue = ref(true);
 /* 입력한 정보 받아서 axios로 호출 */
 async function callData() {
 
-    console.log("실행 전 길이 :", roomList.value.length)
     const getUrl = `/api/chat/room/title/${search_condition.value}`;
-    console.log('getURL: ', getUrl)
 
     const response = await axios.get(`/api/chat/room/title/${search_condition.value}`);
 
     roomList.value = response.data;
-    console.log('roomList : ', roomList.value)
-
-    console.log("실행 후 길이 :", roomList.value.length)
 
     if (roomList.value.length == 0) {
         isTrue.value = false;
@@ -96,9 +91,8 @@ function resetList() {
 async function createNewRoom() {
 
     const final = await axios.get(`http://localhost:30003/chat/room/last`);
-    console.log(final.data);
     const newRoomId = final.data + 1;
-    console.log('newRoomId', newRoomId);
+
 
     await axios.post(`http://localhost:30003/chat/room`, {
         id: newRoomId,

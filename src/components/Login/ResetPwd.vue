@@ -84,13 +84,11 @@ const emailExCheck = async () => {
 
 
 const emailSend = async () => {
-    console.log(memberEmail.value);
     await axios.post("/api/mailSend", {email : memberEmail.value})
     .then(response => {
         certificationNum = response.data;
         let disableConfirmBox = document.querySelector('#confirmBox');
         disableConfirmBox.disabled = false;
-        console.log(certificationNum);
     })
 }
 

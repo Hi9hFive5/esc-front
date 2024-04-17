@@ -121,7 +121,6 @@
 
             const data = await response.json();
             studyclub.selectedExam = data.id;
-            console.log(studyclub.selectedExam);
 
         } catch(error) {
             console.error('fetch error: ' + error.message);
@@ -139,7 +138,6 @@
             goalId: studyclub.selectedGoal
         }
 
-        console.log(modifyData);
 
         try {
             const response = await fetch(`http://localhost:30003/studyclub/modify/${id}`, {

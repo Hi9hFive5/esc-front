@@ -88,7 +88,7 @@ function fetchUserInfo(token) {
         axios.get(`/api/user/info/${payload.sub}`)
             .then(response => {
                 userInfo.value = response.data;
-                console.log(userInfo.value);
+
             })
             .catch(error => {
                 console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
