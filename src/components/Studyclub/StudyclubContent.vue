@@ -186,8 +186,6 @@ onMounted(async () => {
     await fetchStudyLogs();
 });
 
-
-
 const studyschedules = ref([]);
 function goToLogPage() {
     router.push(`/addstudylog/${studyclubId}`);
@@ -215,7 +213,6 @@ const viewSchedule = () => {
     flex-grow: 1;
     text-align: center;
     border: 1px solid black;
-    box-sizing: border-box;
     padding: 20px;
     margin-top: 10px;
 }

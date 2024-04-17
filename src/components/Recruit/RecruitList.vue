@@ -113,15 +113,18 @@
     <div class="wrapper">
         <div class="filter">
             <form class="sort">
-                <label>
-                    <button type="button" class="btn" data-bs-toggle="button">오픽</button>  
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <label class="btn btn-outline-dark" for="btnradio1">토익</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-dark" for="btnradio2">토스</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-dark" for="btnradio3">오픽
+
                 </label>
-                <label>
-                    <button type="button" class="btn" data-bs-toggle="button">토스</button> 
-                </label>
-                <label>
-                    <button type="button" class="btn" data-bs-toggle="button">토익</button> 
-                </label>
+                </div>
             </form>
             <div class="fixed" @click="makeStudyClub()">스터디클럽 생성하기</div>
         </div>
@@ -178,5 +181,13 @@
         bottom: 50px;
         right: 50px;
         z-index: 999;
+    }
+    .sort {
+        width: fit-content;
+    }
+    .filter {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
     }
 </style>

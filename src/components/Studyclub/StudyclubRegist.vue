@@ -11,7 +11,8 @@
     const state = reactive({
         category: [],
         exams: [],
-        goals: []
+        goals: [],
+        studyclub: {}
     })
 
     const name = ref();
@@ -98,15 +99,46 @@
             if(!response) {
                 throw new Error('Network response was not ok');
             }
-            alert('스터디클럽이 생성되었습니다!');
-            alert('모집글 작성 페이지로 이동합니다.');
 
             const data = await response.json();
-            router.push(`/recruit-regist/${data["id"]}`);
+            state.studyclub = data;
             
         } catch(error) {
             console.error('There was a problem with the fetch operation:', error.message);
         }
+
+        const postData2 = {
+            "memberId": id,
+            "studyclubId": state.studyclub.id,
+            "memberType": "L"
+        }
+
+        try {
+            const response = await fetch(`/api/studyclubMember/insertMember`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                    body: JSON.stringify(postData2)
+            });
+
+
+            console.log(postData);
+            console.log(postData2);
+
+            if(!response) {
+                throw new Error('Network response was not ok');
+            }
+            alert('스터디클럽이 생성되었습니다!');
+            alert('모집글 작성 페이지로 이동합니다.');
+            
+            router.push(`/recruit-regist/${state.studyclub["id"]}`);
+            
+        } catch(error) {
+            console.error('There was a problem with the fetch operation:', error.message);
+        }
+
     };
 
     onMounted(async() => {

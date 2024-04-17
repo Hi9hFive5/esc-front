@@ -311,6 +311,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+  height: max-content;
 }
 .profile {
   display: flex;
@@ -335,7 +336,6 @@
 .box {
   flex: 1;
   border: 1px solid black;
-  height: 300px;
   padding: 20px;
   margin: 20px;
 }
