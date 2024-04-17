@@ -86,7 +86,6 @@ function fetchUserInfo(token) {
         axios.get(`/api/user/info/${payload.sub}`)
             .then(response => {
                 userInfo.value = response.data;
-                console.log(userInfo.value);
             })
             .catch(error => {
                 console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
@@ -103,7 +102,6 @@ const fetchStudySchedules = async () => {
     try {
         const response = await axios.get(`/api/study-schedule/studyclub/${id}`);
         const data = response.data;
-        console.log(data);
 
         const scheduleArray = [];
 
@@ -143,7 +141,6 @@ const fetchStudyLogs = async () => {
 
           const data = await response.json();
           studylogs.value = data;
-          console.log(studylogs.value);
 
       } catch(error) {
           console.error('fetch error: ' + error.message);
@@ -160,12 +157,10 @@ onMounted(async () => {
         const response1 = await axios.get(`/api/user/findJoinMemberAndName/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         userinfos.value = response1.data
-        console.log(userinfos);
 
         const response2 = await axios.get(`/api/studyLog/findStudyclubLog/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         studylogs.value = response2.data
-        console.log(studylogs);
 
         
         const token = localStorage.getItem('token');

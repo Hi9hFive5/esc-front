@@ -37,7 +37,6 @@
     const res = await axios.get(`http://localhost:30003/user/${memberId}`)
     // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
     userdata.value = res.data 
-    console.log(userdata.value)   
   
     
   } catch (error) {

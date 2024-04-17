@@ -41,7 +41,6 @@
       const response = await axios.get(`http://localhost:30003/studyLog/find/${id}`)
 
       logData.value = response.data 
-            console.log(logData.value)
     } catch (error) {
       console.error('데이터를 받아오는 중 에러 발생:', error);
     }

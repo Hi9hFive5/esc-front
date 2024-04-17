@@ -31,7 +31,6 @@ const passwordConfirm = ref('');
 const memberEmail = useRoute();
 let pwdConditionCheck = false;
 
-console.log(memberEmail.params.email)
 
 
 function inputCheck() {

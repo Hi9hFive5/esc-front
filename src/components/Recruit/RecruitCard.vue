@@ -62,7 +62,6 @@ const fetchCategory = async(id) => {
         throw new Error('response is not ok');
       }
 
-      console.log(state.category);
       const data = await response.json();
       state.category = data;
 

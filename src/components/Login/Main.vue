@@ -100,24 +100,6 @@ if (tokenParts.length === 3) {
     }
 }
 
-function handleScroll() {
-    const first = document.querySelector('.first');
-    const third = document.querySelector('.third');
-    const second = document.querySelector('.second');
-
-    if (window.scrollY >= third.offsetTop) {
-        // 현재 스크롤 위치가 'third' 섹션의 시작점 이하일 경우
-        window.scrollTo(second.offsetTop);
-        console.log("1");
-    } else if (window.scrollY + window.innerHeight >= second.offsetTop) {
-        // 현재 스크롤 위치가 'second' 섹션의 시작점 이하일 경우
-        window.scrollTo(second.offsetTop);
-    } else if (window.scrollY + window.innerHeight >= first.offsetTop) {
-        // 현재 스크롤 위치가 'first' 섹션의 시작점 이하일 경우
-        window.scrollTo(second.offsetTop);
-    }
-}
-
 onMounted(() => {
     if (token) {
     fetchUserInfo(token);
@@ -125,14 +107,8 @@ onMounted(() => {
     } else {
     console.error('토큰이 없습니다.');
     }
-
-    window.addEventListener('scroll', handleScroll);
-
 });    
 
-onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll);
-});
 
 </script>
 

@@ -156,6 +156,18 @@
         }
     }
 
+    function replyCheck(userId, id) {
+        if(loginCheck == true && userInfo.value.id != state.recruit["writerId"]) {
+            applyRecruit(userId, id);
+        } else if (loginCheck == true && userInfo.value.id == state.recruit["writerId"]) {
+            alert('스터디그룹을 생성한 본인은 신청할 수 없습니다.');
+            return false;
+        }
+        else {
+            alert('로그인해주세요!');
+        }
+    }
+
     function modifyPage() {
         router.push(`/recruit-modify/${id}`)
     }
@@ -171,10 +183,11 @@
         const token = localStorage.getItem('token');
 
         if (token) {
-        fetchUserInfo(token);
-        loginCheck=true;
+            fetchUserInfo(token);
+            loginCheck=true;
         } else {
-        console.error('토큰이 없습니다.');
+            loginCheck = false;
+            console.error('토큰이 없습니다.'); 
         }
 
         
@@ -217,7 +230,7 @@
             </div>
             <hr>
             <div class="submit">
-                <button class="applybtn" v-if="loginCheck" @click="applyRecruit(userId, id)">신청하기</button>
+                <button class="applybtn" @click="replyCheck(userId, id)">신청하기</button>
             </div>
         </div>
     </div>

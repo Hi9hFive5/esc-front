@@ -205,10 +205,6 @@ function initAllCalendar(events) {
         },
         events: events.value,
         eventClick: function (info) {
-            console.log('클릭시');
-            console.log(info.event.studyclubId);
-            console.log(info.event.start);
-            console.log(info.event.end);
             // 스터디 일정 추가
             handleAllEventClick(info, calendar);
         },
@@ -342,7 +338,6 @@ async function modifyEventData(eventData) {
 async function removeEventData(id) {
     try {
         // 서버에 데이터 전송을 위한 HTTP DELETE 요청
-        console.log(id);
         const response = await axios.delete(`http://localhost:30003/member-schedule/remove/${id}`);
         console.log('이벤트 데이터가 성공적으로 삭제 되었습니다:', response.data);
     } catch (error) {
@@ -366,7 +361,6 @@ async function handleEventSelect(info, calendar) {
         // 머지 가능한 이벤트 찾기
         if (eventitem !== null && typeof eventitem !== 'undefined') {
 
-            console.log(eventitem);
             // 셀렉한 부분의 시작 시간이 기존 이벤트의 사이에 존재할 때
             if (moment(start).format('YYYY-MM-DD HH:mm') >= moment(eventitem.start).format('YYYY-MM-DD HH:mm') && moment(start).format('YYYY-MM-DD HH:mm') <= moment(eventitem.end).format('YYYY-MM-DD HH:mm')) {
                 eventmerge = true;
@@ -394,7 +388,6 @@ async function handleEventSelect(info, calendar) {
                 eventData.end = moment(eventitem.end).format('YYYY-MM-DD HH:mm:ss');
                 await modifyEventData(eventData);
 
-                console.log('머지 트루');
                 let calEvent = calendar.getEventById(eventitem.id);
                 calEvent.setDates(eventitem.start, eventitem.end);
             }
@@ -403,7 +396,6 @@ async function handleEventSelect(info, calendar) {
     }
 
     if (!eventmerge) {
-        console.log('머지 false');
         eventData = {
             start: start,
             end: end,
@@ -433,12 +425,10 @@ async function handleEventResize(info, calendar) {
     let eventmerge = false;
 
     for (const eventitem of events.value) {
-        console.log('머지 확인');
         if (eventitem !== null && typeof eventitem !== 'undefined') {
 
             // 같은 이벤트일 때는 머지 안함
             if (Number(id) === eventitem.id) {
-                console.log('건너뜀');
                 continue;
             }
 

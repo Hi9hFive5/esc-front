@@ -21,7 +21,7 @@
 
   const fetchRecruit = async(id) => {
     try {
-        const response = await fetch(`http://localhost:8080/recruit/detail/${id}`);
+        const response = await fetch(`http://localhost:30003/recruit/detail/${id}`);
         
         if(!response.ok) {
             throw new Error('response is not ok');
@@ -29,8 +29,6 @@
 
         const data = await response.json();
         state.recruit = data;
-
-        console.log(props.application);
 
     } catch(error) {
         console.error('fetch error: ' + error.message);

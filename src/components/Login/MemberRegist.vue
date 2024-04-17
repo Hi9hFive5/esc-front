@@ -115,7 +115,6 @@ function inputCheck() {
 }
 
 const emailCheck = async () => {
-    console.log(memberEmail.value);
     await axios.get(`/api/user/emailCheck/${memberEmail.value}`)
     .then(response => {
         if(response.data == true) {
@@ -157,13 +156,11 @@ const nicknameCheck = async () => {
 };
 
 const emailSend = async () => {
-    console.log(memberEmail.value);
     await axios.post("/api/mailSend", {email : memberEmail.value})
     .then(response => {
         certificationNum = response.data;
         let disableConfirmBox = document.querySelector('#confirmBox');
         disableConfirmBox.disabled = false;
-        console.log(certificationNum);
     })
 }
 
