@@ -68,7 +68,7 @@ async function saveStudySchedule() {
     const postData = {
         title: title.value,
         content: content.value,
-        start: start.value,
+        start: start.value, 
         end: end.value,
         useStatus: 'Y',
         studyclubId: studyclubId.value,
@@ -96,7 +96,6 @@ const selectedMembers = ref([]);
 // 선택하지 않은 멤버
 const unselectedMembers = ref();
 
-
 // 선택된 멤버 추가
 function addParticipant(id) {
     const index = unselectedMembers.value.findIndex(member => member.id === id);
@@ -118,37 +117,54 @@ async function removeParticipant(id) {
 </script>
 
 <template>
-    <Header></Header>
-    <div class="container">
-        <div class="title">스터디 일정 등록</div>
-        <div class="info">
-            <div class="name">제목:
-                <input class="content" v-model="title" />
-            </div>
-            <div class="introduce">내용: </div>
-            <textarea class="content" cols="50" rows="5" v-model="content" />
-            <div class="date">시작 시간:
-                <input type="datetime-local" class="content" v-model="start">
-            </div>
-            <div class="date">종료 시간:
-                <input type="datetime-local" class="content" v-model="end">
-            </div>
-            <div class="member">참여 멤버:
-                <select class="content" v-model="selectMember" @change="addParticipant(selectMember.id)">
-                    <option disabled value="">선택해주세요</option>
-                    <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
-                </select>
-                <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
-                    <div>{{ item.name }}</div>
-                    <button @click="removeParticipant(item.id)">x</button>
+    <div class="all">
+        <Header></Header>
+        <div class="wrapper">
+            <div class="container">
+                <div class="title">스터디 일정 등록</div>
+                <div class="info">
+                    <div class="form-floating" v-if="!isReadOnly">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 50px" v-model="title"></textarea>
+                    <label for="floatingTextarea2">제목</label>
+                    </div>
+                    <div v-else class="content">{{ title }}</div>
+                    <div class="form-floating" v-if="!isReadOnly">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 300px" v-model="content"></textarea>
+                    <label for="floatingTextarea2">내용</label>
+                    </div>
+                    <div class="schedule-content" v-else>
+                        <hr>
+                        {{ content }}
+                    </div>
+                    <div class="date">시작 시간:
+                        <input type="datetime-local" class="content" v-model="start">
+                    </div>
+                    <div class="date">종료 시간:
+                        <input type="datetime-local" class="content" v-model="end">
+                    </div>
+                    <div class="member">
+                        참여 멤버:
+                        <select class="form-select" aria-label="Default select example" v-model="selectMember" @change="addParticipant(selectMember.id)">
+                            <option disabled value="">선택해주세요</option>
+                            <option v-for="item in unselectedMembers" :value="item"> {{ item.name }} </option>
+                        </select>
+                        <div class="member-info">
+                        <div class="selectedMember" v-for="item in selectedMembers" :value="item.id">
+                            <div class="name-button">
+                            <div>{{ item.name }}</div>
+                            <button @click="removeParticipant(item.id)">x</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="submit" @click="saveStudySchedule()">
+                        <button class="btn btn-dark">등록하기</button>
+                    </div>
                 </div>
             </div>
-            <div class="submit" @click="saveStudySchedule()">
-                <button>등록하기</button>
-            </div>
         </div>
+        <Footer></Footer>
     </div>
-    <Footer></Footer>
 </template>
 
 <style scoped>
@@ -157,7 +173,20 @@ async function removeParticipant(id) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 30px;
+    /* margin: 30px; */
+}
+
+.wrapper {
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+    width: 75%;
+    display: grid;
+}
+
+.all {
+    display: grid;
+    grid-template-rows: 100px minmax(780px, auto) 200px;
+    align-items: start;
 }
 
 .title {
@@ -167,8 +196,9 @@ async function removeParticipant(id) {
 }
 
 .info {
-    margin: 40px;
+    /* margin: 40px; */
     align-items: center;
+    width: 100%;
 }
 
 .info div {
@@ -185,9 +215,24 @@ async function removeParticipant(id) {
     padding: 20px;
 }
 
+.member-info {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
 .selectedMember {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.name-button {
+    display: flex;
+    align-items: center;
+}
+
+.name-button>div {
+    margin-right: 5px;
 }
 </style>
