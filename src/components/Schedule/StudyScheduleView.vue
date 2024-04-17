@@ -114,26 +114,26 @@ const navigateToStudy = () => {
     <Header></Header>
     <div class="wrapper">
       <div class="container">
-        <div class="scheduleTitle">스터디 미팅</div>
-        <div class="buttonBox">
-          <button @click.stop="navigateToStudy">스터디</button>
-          <button @click.stop="navigateToMemberSchedule">그룹 스케줄러</button> 
+        <div class="schedule-title">📖 스터디 미팅</div>
+        <div class="schedule-button-box">
+          <button class="btn btn-outline-dark" @click.stop="navigateToStudy">스터디</button>
+          <button class="btn btn-outline-dark" @click.stop="navigateToMemberSchedule">그룹 스케줄러</button> 
         </div>
         <div v-for="(row, index) in schedules" class="list">
           <div class="list-item">
             <div class="item">
-              <div class="rowTitle">{{ index + 1 }}. {{ row.title }}</div>
-              <div class="Time">
-                <div class="rowTime">시작시간: {{ row.start }}</div>
-                <div class="rowTime">종료시간: {{ row.end }}</div>
+              <div class="row-title">{{ row.title }}</div>
+              
+              <div class="time">
+                <div class="row-time">시작시간: {{ row.start }}</div>
+                <div class="row-time">종료시간: {{ row.end }}</div>
               </div>
             </div>
-            <button class="deatils" @click.stop="navigateToDetail(row.id)">상세</button>
+            <button class="btn btn-dark" @click.stop="navigateToDetail(row.id)">상세</button>
           </div>
         </div>
       </div>
     </div>
-
     <Footer></Footer>
   </div>
 
@@ -162,19 +162,29 @@ const navigateToStudy = () => {
   align-items: start;
 }
 
-.scheduleTitle {
+.schedule-title {
   font-size: 30px;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
-.buttonBox {
+.horizontal-line {
+  border-top: 1px solid black; 
+  width: 100%; 
+  margin-bottom: 20px;
+}
+
+.schedule-button-box {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
+.schedule-button-box button {
+  margin-right: 10px;
+}
 .add-btn {
   padding: 5px 10px;
   background-color: #4CAF50;
@@ -204,17 +214,17 @@ const navigateToStudy = () => {
   height: 100px;
 }
 
-.Time {
+.time {
   display: flex;
   justify-content: space-between;
 }
 
-.rowTime {
+.row-time {
   padding: 10px;
   font-size: 15px;
 }
 
-.deatils {
+.details {
   padding: 5px 10px;
   background-color: #4CAF50;
   color: white;
