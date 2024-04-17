@@ -40,10 +40,10 @@
                   </h2>
                   <div :id="`flush-collaps${log.id}`" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                      <div class="apply-name">{{ log.content }}</div>
+                      <div class="apply-name">{{ log.contentInfo }}</div>
                     </div>
                     <hr>
-                    <div style="text-align: center; margin-bottom: 15px;" @click="navigateTo(`/studyLog/${log.id}`)">수정하기</div>
+                    <div style="text-align: center; margin-bottom: 15px;" @click="navigateTo(`/studyLog/${log.id}`)">자세히 보기 &nbsp; ></div>
                   </div>
 
               </div>
@@ -86,6 +86,7 @@ function fetchUserInfo(token) {
         axios.get(`/api/user/info/${payload.sub}`)
             .then(response => {
                 userInfo.value = response.data;
+                console.log(userInfo.value);
             })
             .catch(error => {
                 console.error('사용자 정보를 가져오는 중 오류가 발생했습니다.', error);
@@ -102,6 +103,7 @@ const fetchStudySchedules = async () => {
     try {
         const response = await axios.get(`/api/study-schedule/studyclub/${id}`);
         const data = response.data;
+        console.log(data);
 
         const scheduleArray = [];
 
@@ -141,6 +143,7 @@ const fetchStudyLogs = async () => {
 
           const data = await response.json();
           studylogs.value = data;
+          console.log(studylogs.value);
 
       } catch(error) {
           console.error('fetch error: ' + error.message);
@@ -157,10 +160,12 @@ onMounted(async () => {
         const response1 = await axios.get(`/api/user/findJoinMemberAndName/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         userinfos.value = response1.data
+        console.log(userinfos);
 
         const response2 = await axios.get(`/api/studyLog/findStudyclubLog/${studyclubId}`)
         // 요청이 성공했을 때 받은 데이터를 Vue 컴포넌트 데이터에 저장
         studylogs.value = response2.data
+        console.log(studylogs);
 
         
         const token = localStorage.getItem('token');
@@ -180,6 +185,8 @@ onMounted(async () => {
     await fetchStudySchedules(id);
     await fetchStudyLogs();
 });
+
+
 
 const studyschedules = ref([]);
 function goToLogPage() {
@@ -208,6 +215,7 @@ const viewSchedule = () => {
     flex-grow: 1;
     text-align: center;
     border: 1px solid black;
+    box-sizing: border-box;
     padding: 20px;
     margin-top: 10px;
 }

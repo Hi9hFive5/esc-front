@@ -104,6 +104,10 @@ const router = createRouter({
         {
             path: '/studylog/:id',
             component: () => import('@/components/StudyLog/StudyLogPage.vue')
+        },
+        {
+            path: '/updateStudy/:id',
+            component: () => import('@/components/StudyLog/UpdateStudyLog.vue')
         }
     ]
 })
